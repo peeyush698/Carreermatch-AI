@@ -8,3 +8,5 @@ backend/app.py.bak
 
 # Ignore local database if you don't want to upload it
 backend/database.db
+
+backend/uploads/
