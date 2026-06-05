@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Job Matches — CareerMatch AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.jobs-page { min-height: 100vh; background: var(--bg-primary); padding-top: 80px; }
+.jobs-layout { display: grid; grid-template-columns: 280px 1fr; gap: 28px; max-width: 1280px; margin: 0 auto; padding: 40px 24px; }
+.filters-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px; height: fit-content; position: sticky; top: 100px; }
+.filters-panel h3 { font-size: 15px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+.filter-reset { font-size: 12px; color: var(--accent-violet); cursor: pointer; font-weight: 600; }
+.filter-group { margin-bottom: 22px; }
+.filter-group label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 10px; }
+.filter-options { display: flex; flex-direction: column; gap: 8px; }
+.filter-option { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.filter-option input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent-purple); cursor: pointer; }
+.filter-option span { font-size: 13px; color: var(--text-secondary); }
+.filter-option .count { margin-left: auto; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 100px; }
+.range-wrap { padding: 4px 0; }
+.range-slider { width: 100%; accent-color: var(--accent-purple); cursor: pointer; }
+.range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+.jobs-main { }
+.jobs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.jobs-header h2 { font-size: 20px; font-weight: 800; }
+.jobs-header p { font-size: 13px; color: var(--text-muted); }
+.search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+.search-input-wrap { flex: 1; position: relative; }
+.search-input-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); }
+.search-input { width: 100%; padding: 12px 14px 12px 42px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 14px; color: var(--text-primary); font-family: var(--font-body); transition: all 0.2s; }
+.search-input:focus { outline: none; border-color: rgba(108,99,255,0.4); background: var(--bg-card-hover); }
+.search-input::placeholder { color: var(--text-muted); }
+.filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.filter-btn { padding: 7px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+.filter-btn.active, .filter-btn:hover { background: rgba(108,99,255,0.12); border-color: rgba(108,99,255,0.3); color: var(--accent-violet); }
+.jobs-grid { display: flex; flex-direction: column; gap: 16px; }
+.job-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 22px; transition: all 0.3s; cursor: pointer; }
+.job-card:hover { background: var(--bg-card-hover); border-color: rgba(108,99,255,0.25); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.job-card-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+.job-logo { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; flex-shrink: 0; }
+.job-info { flex: 1; }
+.job-title { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
+.job-company { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+.job-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.job-meta-tag { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-muted); }
+.job-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.match-badge { padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 800; }
+.match-badge.high { background: rgba(52,211,153,0.15); color: var(--accent-green); border: 1px solid rgba(52,211,153,0.3); }
+.match-badge.medium { background: rgba(245,158,11,0.15); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.3); }
+.match-badge.low { background: rgba(239,68,68,0.12); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.2); }
+.job-salary { font-size: 14px; font-weight: 700; color: var(--accent-cyan); }
+.job-skills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.job-skill { padding: 4px 10px; background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.15); border-radius: 100px; font-size: 11px; font-weight: 600; color: var(--accent-violet); }
+.job-skill.missing { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); color: var(--accent-red); }
+.job-actions { display: flex; gap: 10px; align-items: center; }
+.btn-apply { padding: 9px 20px; background: var(--gradient-main); border: none; border-radius: var(--radius-md); font-size: 13px; font-weight: 700; color: white; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.btn-apply:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-save { padding: 9px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.btn-save:hover { border-color: rgba(108,99,255,0.3); color: var(--accent-violet); }
+.job-posted { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+.new-badge { padding: 3px 8px; background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3); border-radius: 100px; font-size: 10px; font-weight: 700; color: var(--accent-green); }
+.sort-select { padding: 9px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 13px; color: var(--text-secondary); font-family: var(--font-body); cursor: pointer; }
+.sort-select:focus { outline: none; }
+@media (max-width: 900px) { .jobs-layout { grid-template-columns: 1fr; } .filters-panel { position: static; } }
+</style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo"><div class="logo-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#jlg)"/><path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="jlg" x1="2" y1="2" x2="26" y2="26"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#00D4FF"/></linearGradient></defs></svg></div><span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="resume-upload.html" class="nav-link">Upload Resume</a></li>
+      <li><a href="jobs.html" class="nav-link active">Jobs</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions"><a href="auth.html" class="btn-ghost">Login</a><a href="auth.html" class="btn-primary-sm">Get Started</a></div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="jobs-page">
+  <div class="jobs-layout">
+    <!-- FILTERS SIDEBAR -->
+    <aside class="filters-panel">
+      <h3>Filters <span class="filter-reset" onclick="resetFilters()">Reset All</span></h3>
+
+      <div class="filter-group">
+        <label>Job Type</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" checked/><span>Full Time</span><span class="count">89</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Part Time</span><span class="count">12</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Internship</span><span class="count">34</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Contract</span><span class="count">8</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Remote</span><span class="count">45</span></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Experience Level</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" checked/><span>Fresher (0-1 yr)</span><span class="count">56</span></label>
+          <label class="filter-option"><input type="checkbox" checked/><span>Junior (1-3 yrs)</span><span class="count">48</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Mid (3-5 yrs)</span><span class="count">22</span></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Location</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" checked/><span>Bengaluru</span><span class="count">42</span></label>
+          <label class="filter-option"><input type="checkbox" checked/><span>Pune</span><span class="count">28</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Hyderabad</span><span class="count">24</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Mumbai</span><span class="count">18</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Noida</span><span class="count">14</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Chennai</span><span class="count">12</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Remote</span><span class="count">45</span></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Salary Range (LPA)</label>
+        <div class="range-wrap">
+          <input type="range" class="range-slider" id="salaryRange" min="200000" max="2000000" value="800000" step="50000"/>
+          <div class="range-labels"><span>₹2L</span><span id="salaryDisplay">₹8.0L</span><span>₹20L</span></div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Company</label>
+        <div class="filter-options">
+          <label class="filter-option"><input type="checkbox" checked/><span>TCS</span><span class="count">18</span></label>
+          <label class="filter-option"><input type="checkbox" checked/><span>Infosys</span><span class="count">15</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Wipro</span><span class="count">12</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>HCL</span><span class="count">10</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Cognizant</span><span class="count">9</span></label>
+          <label class="filter-option"><input type="checkbox"/><span>Tech Mahindra</span><span class="count">8</span></label>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="width:100%;margin-top:8px" onclick="showToast('✅ Filters applied! Showing 126 matching jobs.')">Apply Filters</button>
+    </aside>
+
+    <!-- JOBS MAIN -->
+    <div class="jobs-main">
+      <div class="jobs-header">
+        <div>
+          <h2>Job <span class="gradient-text">Matches</span></h2>
+          <p>126 jobs matched based on your resume · Sorted by match score</p>
+        </div>
+        <select class="sort-select" onchange="showToast('Sorting updated!')">
+          <option>Sort: Best Match</option>
+          <option>Sort: Newest First</option>
+          <option>Sort: Salary High-Low</option>
+          <option>Sort: Salary Low-High</option>
+        </select>
+      </div>
+
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" placeholder="Search jobs, companies, skills..." oninput="searchJobs(this.value)"/>
+        </div>
+      </div>
+
+      <div class="filter-tabs">
+        <button class="filter-btn active" data-filter="all">All Jobs (126)</button>
+        <button class="filter-btn" data-filter="java">Java (45)</button>
+        <button class="filter-btn" data-filter="python">Python (32)</button>
+        <button class="filter-btn" data-filter="web">Web Dev (28)</button>
+        <button class="filter-btn" data-filter="data">Data (14)</button>
+        <button class="filter-btn" data-filter="fullstack">Full Stack (21)</button>
+      </div>
+
+      <div class="jobs-grid">
+
+        <!-- JOB 1 -->
+        <div class="job-card" data-category="java">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#6C63FF,#00D4FF)">TCS</div>
+            <div class="job-info">
+              <div class="job-title">Java Developer — Associate</div>
+              <div class="job-company">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                Tata Consultancy Services
+              </div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Pune, Maharashtra</span>
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Full Time</span>
+                <span class="job-meta-tag">0-2 Years</span>
+                <span class="new-badge">NEW</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge high">89% Match</span>
+              <span class="job-salary">₹4–6 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">Java</span>
+            <span class="job-skill">Spring Boot</span>
+            <span class="job-skill">SQL</span>
+            <span class="job-skill">REST API</span>
+            <span class="job-skill missing">Microservices ✗</span>
+            <span class="job-skill missing">Docker ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'TCS Java Developer')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted 2 days ago</span>
+          </div>
+        </div>
+
+        <!-- JOB 2 -->
+        <div class="job-card" data-category="python">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">INF</div>
+            <div class="job-info">
+              <div class="job-title">Python Developer — Systems Engineer</div>
+              <div class="job-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Infosys Limited</div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Bengaluru, Karnataka</span>
+                <span class="job-meta-tag">Full Time</span>
+                <span class="job-meta-tag">0-2 Years</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge high">82% Match</span>
+              <span class="job-salary">₹3.5–5 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">Python</span>
+            <span class="job-skill">Django</span>
+            <span class="job-skill">SQL</span>
+            <span class="job-skill">REST API</span>
+            <span class="job-skill">Git</span>
+            <span class="job-skill missing">Flask ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'Infosys Python Developer')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted 3 days ago</span>
+          </div>
+        </div>
+
+        <!-- JOB 3 -->
+        <div class="job-card" data-category="web">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#34D399,#0EA5E9)">WIP</div>
+            <div class="job-info">
+              <div class="job-title">Web Developer — Frontend</div>
+              <div class="job-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Wipro Technologies</div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Hyderabad, Telangana</span>
+                <span class="job-meta-tag">Full Time</span>
+                <span class="job-meta-tag">0-1 Year</span>
+                <span class="new-badge">NEW</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge high">76% Match</span>
+              <span class="job-salary">₹3–4.5 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">HTML/CSS</span>
+            <span class="job-skill">JavaScript</span>
+            <span class="job-skill">React</span>
+            <span class="job-skill">Git</span>
+            <span class="job-skill missing">TypeScript ✗</span>
+            <span class="job-skill missing">Redux ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'Wipro Web Developer')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted 1 day ago</span>
+          </div>
+        </div>
+
+        <!-- JOB 4 -->
+        <div class="job-card" data-category="java">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#A78BFA,#6C63FF)">HCL</div>
+            <div class="job-info">
+              <div class="job-title">Backend Developer — Java/Spring</div>
+              <div class="job-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>HCL Technologies</div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Noida, UP</span>
+                <span class="job-meta-tag">Full Time</span>
+                <span class="job-meta-tag">1-3 Years</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge medium">71% Match</span>
+              <span class="job-salary">₹4–7 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">Java</span>
+            <span class="job-skill">Spring Boot</span>
+            <span class="job-skill">Microservices</span>
+            <span class="job-skill">MySQL</span>
+            <span class="job-skill missing">Kubernetes ✗</span>
+            <span class="job-skill missing">AWS ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'HCL Backend Developer')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted 5 days ago</span>
+          </div>
+        </div>
+
+        <!-- JOB 5 -->
+        <div class="job-card" data-category="fullstack">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#0EA5E9,#6C63FF)">COG</div>
+            <div class="job-info">
+              <div class="job-title">Full Stack Developer — Associate</div>
+              <div class="job-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Cognizant Technology Solutions</div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Chennai, Tamil Nadu</span>
+                <span class="job-meta-tag">Full Time</span>
+                <span class="job-meta-tag">0-2 Years</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge medium">68% Match</span>
+              <span class="job-salary">₹3.5–5.5 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">React</span>
+            <span class="job-skill">Node.js</span>
+            <span class="job-skill">Java</span>
+            <span class="job-skill">SQL</span>
+            <span class="job-skill missing">MongoDB ✗</span>
+            <span class="job-skill missing">GraphQL ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'Cognizant Full Stack Developer')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted 1 week ago</span>
+          </div>
+        </div>
+
+        <!-- JOB 6 -->
+        <div class="job-card" data-category="data">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#EC4899,#8B5CF6)">TM</div>
+            <div class="job-info">
+              <div class="job-title">Data Analyst — Junior</div>
+              <div class="job-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Tech Mahindra</div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Bengaluru, Karnataka</span>
+                <span class="job-meta-tag">Full Time</span>
+                <span class="job-meta-tag">0-1 Year</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge medium">65% Match</span>
+              <span class="job-salary">₹3–5 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">Python</span>
+            <span class="job-skill">SQL</span>
+            <span class="job-skill">Excel</span>
+            <span class="job-skill missing">Tableau ✗</span>
+            <span class="job-skill missing">Power BI ✗</span>
+            <span class="job-skill missing">Pandas ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'Tech Mahindra Data Analyst')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted 4 days ago</span>
+          </div>
+        </div>
+
+        <!-- JOB 7 -->
+        <div class="job-card" data-category="java">
+          <div class="job-card-top">
+            <div class="job-logo" style="background:linear-gradient(135deg,#F97316,#EF4444)">CAP</div>
+            <div class="job-info">
+              <div class="job-title">Software Engineer — Java</div>
+              <div class="job-company"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Capgemini India</div>
+              <div class="job-meta">
+                <span class="job-meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Mumbai, Maharashtra</span>
+                <span class="job-meta-tag">Full Time</span>
+                <span class="job-meta-tag">0-2 Years</span>
+                <span class="new-badge">NEW</span>
+              </div>
+            </div>
+            <div class="job-right">
+              <span class="match-badge medium">62% Match</span>
+              <span class="job-salary">₹3.5–6 LPA</span>
+            </div>
+          </div>
+          <div class="job-skills">
+            <span class="job-skill">Java</span>
+            <span class="job-skill">J2EE</span>
+            <span class="job-skill">Hibernate</span>
+            <span class="job-skill">Oracle DB</span>
+            <span class="job-skill missing">Maven ✗</span>
+          </div>
+          <div class="job-actions">
+            <button class="btn-apply" onclick="applyJob(this,'Capgemini Software Engineer')">Apply Now</button>
+            <button class="btn-save" onclick="saveJob(this)">♡ Save</button>
+            <span class="job-posted">Posted today</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+<script>
+function applyJob(btn, jobTitle) {
+  btn.textContent = '✓ Applied!';
+  btn.style.background = 'linear-gradient(135deg,#34D399,#0EA5E9)';
+  btn.disabled = true;
+  showToast('🎉 Application submitted for ' + jobTitle + '! Check your email for confirmation.');
+}
+function saveJob(btn) {
+  const saved = btn.textContent.includes('♡');
+  btn.textContent = saved ? '♥ Saved' : '♡ Save';
+  btn.style.color = saved ? 'var(--accent-red)' : '';
+  btn.style.borderColor = saved ? 'rgba(239,68,68,0.3)' : '';
+  showToast(saved ? '❤️ Job saved to your list!' : '💔 Job removed from saved list.');
+}
+function resetFilters() {
+  document.querySelectorAll('.filter-option input').forEach(cb => cb.checked = false);
+  showToast('🔄 All filters reset.');
+}
+</script>
+</body>
+</html>

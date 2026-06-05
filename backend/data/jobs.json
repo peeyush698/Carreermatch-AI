@@ -1,0 +1,222 @@
+[
+  {
+    "id": "job_001",
+    "title": "Associate Java Developer",
+    "company": "Tata Consultancy Services (TCS)",
+    "location": "Pune, Maharashtra",
+    "requiredSkills": ["Java", "Spring Boot", "SQL", "REST API", "Git"],
+    "experience": "0-2 Years",
+    "salary": "₹4.5–6 LPA",
+    "description": "Develop and maintain robust enterprise backend microservices. Write database queries and integrate REST endpoints in Spring Boot.",
+    "applyLink": "https://www.tcs.com/careers"
+  },
+  {
+    "id": "job_002",
+    "title": "Systems Engineer — Python",
+    "company": "Infosys",
+    "location": "Bengaluru, Karnataka",
+    "requiredSkills": ["Python", "Django", "SQL", "MySQL", "Git"],
+    "experience": "0-2 Years",
+    "salary": "₹3.6–5.2 LPA",
+    "description": "Build high-performance web systems and automated scripts. Write optimized SQL queries and integrate third-party APIs.",
+    "applyLink": "https://www.infosys.com/careers"
+  },
+  {
+    "id": "job_003",
+    "title": "Web Developer — Associate",
+    "company": "Wipro",
+    "location": "Hyderabad, Telangana",
+    "requiredSkills": ["HTML", "CSS", "JavaScript", "React", "Git"],
+    "experience": "0-1 Years",
+    "salary": "₹3.5–4.8 LPA",
+    "description": "Design responsive, visually stunning dark-themed layouts and reusable React components. Coordinate with the QA team.",
+    "applyLink": "https://www.wipro.com/careers"
+  },
+  {
+    "id": "job_004",
+    "title": "Backend API Developer",
+    "company": "HCL Technologies",
+    "location": "Noida, Uttar Pradesh",
+    "requiredSkills": ["Node.js", "Express.js", "MongoDB", "REST API", "Git"],
+    "experience": "1-3 Years",
+    "salary": "₹4.8–7 LPA",
+    "description": "Implement efficient API architectures using Node and Express. Design NoSQL schemas using MongoDB and maintain secure Git releases.",
+    "applyLink": "https://www.hcltech.com/careers"
+  },
+  {
+    "id": "job_005",
+    "title": "Full Stack Engineer — React & Node",
+    "company": "Cognizant",
+    "location": "Chennai, Tamil Nadu",
+    "requiredSkills": ["JavaScript", "React", "Node.js", "Express.js", "MySQL", "Git"],
+    "experience": "0-3 Years",
+    "salary": "₹4–6.5 LPA",
+    "description": "Develop both ends of premium corporate web platforms. Design layouts, state handling and secure REST databases.",
+    "applyLink": "https://www.cognizant.com/careers"
+  },
+  {
+    "id": "job_006",
+    "title": "Python Developer — Flask",
+    "company": "Tech Mahindra",
+    "location": "Mumbai, Maharashtra",
+    "requiredSkills": ["Python", "Flask", "REST API", "SQL", "Git"],
+    "experience": "0-2 Years",
+    "salary": "₹4.2–5.8 LPA",
+    "description": "Build modern micro-APIs using Python Flask. Work on client integration pipelines, database configurations and unit tests.",
+    "applyLink": "https://www.techmahindra.com/careers"
+  },
+  {
+    "id": "job_007",
+    "title": "Data Analyst — Graduate Intern",
+    "company": "Capgemini",
+    "location": "Pune, Maharashtra",
+    "requiredSkills": ["Data Analysis", "SQL", "Excel", "Power BI", "Communication"],
+    "experience": "Fresher",
+    "salary": "₹3.8–5 LPA",
+    "description": "Gather, parse, and analyze transaction data to produce interactive executive Power BI dashboards and present insights.",
+    "applyLink": "https://www.capgemini.com/careers"
+  },
+  {
+    "id": "job_008",
+    "title": "Software Development Engineer (SDE-1)",
+    "company": "Amazon",
+    "location": "Bengaluru, Karnataka",
+    "requiredSkills": ["C++", "Java", "SQL", "Problem Solving", "Git"],
+    "experience": "0-2 Years",
+    "salary": "₹12–18 LPA",
+    "description": "Work on ultra-high scale algorithmic services. Develop clean object-oriented code and resolve complex low-latency challenges.",
+    "applyLink": "https://www.amazon.jobs"
+  },
+  {
+    "id": "job_009",
+    "title": "Machine Learning Engineer",
+    "company": "Google",
+    "location": "Bengaluru, Karnataka",
+    "requiredSkills": ["Python", "Machine Learning", "SQL", "Problem Solving", "Teamwork"],
+    "experience": "1-3 Years",
+    "salary": "₹18–26 LPA",
+    "description": "Research and train high-fidelity deep learning models. Work on search indices, recommendation weights and neural systems.",
+    "applyLink": "https://careers.google.com"
+  },
+  {
+    "id": "job_010",
+    "title": "Frontend Developer — Angular",
+    "company": "Accenture",
+    "location": "Hyderabad, Telangana",
+    "requiredSkills": ["JavaScript", "Angular", "HTML", "CSS", "Git"],
+    "experience": "0-2 Years",
+    "salary": "₹4.5–6.2 LPA",
+    "description": "Develop and maintain robust modular enterprise frontends utilizing Angular, TypeScript, and elegant dark-themed CSS interfaces.",
+    "applyLink": "https://www.accenture.com/careers"
+  },
+  {
+    "id": "job_011",
+    "title": "Junior Python Developer",
+    "company": "TCS",
+    "location": "Noida, Uttar Pradesh",
+    "requiredSkills": ["Python", "Django", "SQL", "Git", "Teamwork"],
+    "experience": "Fresher",
+    "salary": "₹3.6–4.5 LPA",
+    "description": "Learn and work inside team-oriented web environment utilizing Python, Django backend templates, SQL queries and GitHub integrations.",
+    "applyLink": "https://www.tcs.com/careers"
+  },
+  {
+    "id": "job_012",
+    "title": "Web Designer & Developer",
+    "company": "Infosys",
+    "location": "Remote",
+    "requiredSkills": ["HTML", "CSS", "JavaScript", "Communication", "Problem Solving"],
+    "experience": "0-1 Years",
+    "salary": "₹3.2–4.5 LPA",
+    "description": "Design responsive, high-speed landing layouts for international corporate websites and communicate directly with stakeholders.",
+    "applyLink": "https://www.infosys.com/careers"
+  },
+  {
+    "id": "job_013",
+    "title": "Data Analyst",
+    "company": "Wipro",
+    "location": "Bengaluru, Karnataka",
+    "requiredSkills": ["Data Analysis", "SQL", "Excel", "Communication", "Teamwork"],
+    "experience": "0-2 Years",
+    "salary": "₹4–5.5 LPA",
+    "description": "Work with SQL tables to aggregate client metric datasets. Clean data inside Excel sheets and write weekly slides.",
+    "applyLink": "https://www.wipro.com/careers"
+  },
+  {
+    "id": "job_014",
+    "title": "Node.js Backend Developer",
+    "company": "Microsoft",
+    "location": "Hyderabad, Telangana",
+    "requiredSkills": ["JavaScript", "Node.js", "MongoDB", "REST API", "Problem Solving"],
+    "experience": "1-3 Years",
+    "salary": "₹15–22 LPA",
+    "description": "Design secure backend cloud runtimes on Microsoft Azure. Optimize Express services, MongoDB pipelines and API middleware.",
+    "applyLink": "https://careers.microsoft.com"
+  },
+  {
+    "id": "job_015",
+    "title": "Python ML Engineer — Junior",
+    "company": "Tech Mahindra",
+    "location": "Remote",
+    "requiredSkills": ["Python", "Machine Learning", "Data Analysis", "Git", "GitHub"],
+    "experience": "0-2 Years",
+    "salary": "₹4.5–7 LPA",
+    "description": "Implement data pipelines and train classic regression/classification models. Participate in code reviews on GitHub.",
+    "applyLink": "https://www.techmahindra.com/careers"
+  },
+  {
+    "id": "job_016",
+    "title": "React Developer — Associate",
+    "company": "Capgemini",
+    "location": "Mumbai, Maharashtra",
+    "requiredSkills": ["HTML", "CSS", "JavaScript", "React", "Teamwork"],
+    "experience": "Fresher",
+    "salary": "₹3.8–5.2 LPA",
+    "description": "Build high-speed, beautiful frontend components using modern React Hooks and state containers in a joint team structure.",
+    "applyLink": "https://www.capgemini.com/careers"
+  },
+  {
+    "id": "job_017",
+    "title": "Full Stack Java & Angular Engineer",
+    "company": "Cognizant",
+    "location": "Remote",
+    "requiredSkills": ["Java", "Spring Boot", "Angular", "MySQL", "REST API"],
+    "experience": "1-3 Years",
+    "salary": "₹5–8 LPA",
+    "description": "Design complex dual-layer configurations. Leverage Java Spring Boot REST endpoints on Angular frontends connected to MySQL database.",
+    "applyLink": "https://www.cognizant.com/careers"
+  },
+  {
+    "id": "job_018",
+    "title": "C++ Software Developer",
+    "company": "HCL Technologies",
+    "location": "Chennai, Tamil Nadu",
+    "requiredSkills": ["C++", "Problem Solving", "Teamwork", "Communication", "Git"],
+    "experience": "0-2 Years",
+    "salary": "₹4.2–6.5 LPA",
+    "description": "Optimize embedded software system runtimes. Write high-quality, memory-efficient C++ code under close supervision.",
+    "applyLink": "https://www.hcltech.com/careers"
+  },
+  {
+    "id": "job_019",
+    "title": "Business Analyst",
+    "company": "Accenture",
+    "location": "Pune, Maharashtra",
+    "requiredSkills": ["Excel", "Power BI", "Communication", "Problem Solving", "Teamwork"],
+    "experience": "0-3 Years",
+    "salary": "₹4.8–6.8 LPA",
+    "description": "Evaluate complex business data models. Organize spreadsheets, draw dashboards, and interact with managers to outline operational strategies.",
+    "applyLink": "https://www.accenture.com/careers"
+  },
+  {
+    "id": "job_020",
+    "title": "Junior Backend Developer — Flask/Django",
+    "company": "Wipro",
+    "location": "Noida, Uttar Pradesh",
+    "requiredSkills": ["Python", "Flask", "Django", "SQL", "Git"],
+    "experience": "0-1 Years",
+    "salary": "₹3.8–4.8 LPA",
+    "description": "Contribute code to python-based web server solutions. Implement database migrations and test API routes via Git repositories.",
+    "applyLink": "https://www.wipro.com/careers"
+  }
+]

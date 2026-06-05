@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ATS Score Analysis — CareerMatch AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.ats-page { min-height: 100vh; background: var(--bg-primary); padding-top: 80px; }
+.ats-container { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+.ats-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
+.ats-header h1 { font-size: 28px; font-weight: 800; }
+.ats-header p { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+.ats-top-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; margin-bottom: 24px; }
+.score-hero { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 32px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.big-circle { position: relative; width: 180px; height: 180px; margin: 0 auto 24px; }
+.big-circle svg { width: 180px; height: 180px; }
+.big-circle-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.big-score { font-family: var(--font-display); font-size: 52px; font-weight: 800; background: var(--gradient-main); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+.big-score-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.score-grade { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3); border-radius: 100px; font-size: 13px; font-weight: 700; color: var(--accent-green); margin-bottom: 16px; }
+.score-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+.score-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.breakdown-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 28px; }
+.breakdown-panel h3 { font-size: 16px; font-weight: 700; margin-bottom: 22px; }
+.breakdown-items { display: flex; flex-direction: column; gap: 18px; }
+.bi-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.bi-name { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.bi-score { font-size: 14px; font-weight: 800; }
+.bi-bar { height: 10px; background: rgba(255,255,255,0.06); border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
+.bi-fill { height: 100%; border-radius: 5px; transition: width 1s ease; }
+.bi-desc { font-size: 12px; color: var(--text-muted); }
+.ats-mid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+.panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px; }
+.panel h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+.keyword-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.kw-tag { padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+.kw-tag.found { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.25); color: var(--accent-green); }
+.kw-tag.missing { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); color: var(--accent-red); }
+.kw-tag.partial { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(--accent-amber); }
+.kw-legend { display: flex; gap: 14px; margin-top: 14px; font-size: 11px; }
+.issue-list { display: flex; flex-direction: column; gap: 10px; }
+.issue-item { display: flex; gap: 12px; padding: 12px 14px; border-radius: var(--radius-md); }
+.issue-item.critical { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.18); }
+.issue-item.warning { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.18); }
+.issue-item.info { background: rgba(108,99,255,0.07); border: 1px solid rgba(108,99,255,0.18); }
+.issue-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.issue-item.critical .issue-dot { background: var(--accent-red); }
+.issue-item.warning .issue-dot { background: var(--accent-amber); }
+.issue-item.info .issue-dot { background: var(--accent-violet); }
+.issue-content h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.issue-content p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.comparison-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 28px; margin-bottom: 24px; }
+.comparison-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.job-selector { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.job-sel-btn { padding: 8px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+.job-sel-btn.active { background: rgba(108,99,255,0.12); border-color: rgba(108,99,255,0.3); color: var(--accent-violet); }
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.comp-table td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+.status-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+.status-dot::before { content: ''; width: 7px; height: 7px; border-radius: 50%; }
+.status-dot.match::before { background: var(--accent-green); }
+.status-dot.partial::before { background: var(--accent-amber); }
+.status-dot.missing::before { background: var(--accent-red); }
+.status-dot.match { color: var(--accent-green); }
+.status-dot.partial { color: var(--accent-amber); }
+.status-dot.missing { color: var(--accent-red); }
+.improve-section { background: linear-gradient(135deg,rgba(108,99,255,0.08),rgba(0,212,255,0.05)); border: 1px solid rgba(108,99,255,0.2); border-radius: var(--radius-xl); padding: 28px; }
+.improve-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.improve-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.improve-step { padding: 18px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-md); }
+.step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gradient-main); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: white; margin-bottom: 10px; }
+.improve-step h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.improve-step p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+@media (max-width: 900px) { .ats-top-grid { grid-template-columns: 1fr; } .ats-mid-grid { grid-template-columns: 1fr; } .improve-steps { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo"><div class="logo-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#alg)"/><path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="alg" x1="2" y1="2" x2="26" y2="26"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#00D4FF"/></linearGradient></defs></svg></div><span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="resume-upload.html" class="nav-link">Upload Resume</a></li>
+      <li><a href="jobs.html" class="nav-link">Jobs</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions"><a href="auth.html" class="btn-ghost">Login</a><a href="auth.html" class="btn-primary-sm">Get Started</a></div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="ats-page">
+  <div class="ats-container">
+    <div class="ats-header">
+      <div>
+        <h1>ATS Score <span class="gradient-text">Analysis</span></h1>
+        <p>Detailed breakdown of your resume's ATS compatibility · Last analyzed: Today, 10:32 AM</p>
+      </div>
+      <a href="resume-upload.html" class="btn-outline">Re-analyze Resume</a>
+    </div>
+
+    <!-- TOP: SCORE + BREAKDOWN -->
+    <div class="ats-top-grid">
+      <div class="score-hero">
+        <div class="big-circle">
+          <svg viewBox="0 0 180 180">
+            <circle cx="90" cy="90" r="75" fill="none" stroke="rgba(108,99,255,0.12)" stroke-width="12"/>
+            <circle cx="90" cy="90" r="75" fill="none" stroke="url(#bigGrad)" stroke-width="12"
+              stroke-dasharray="471" stroke-dashoffset="103" stroke-linecap="round" transform="rotate(-90 90 90)"/>
+            <defs>
+              <linearGradient id="bigGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6C63FF"/>
+                <stop offset="100%" stop-color="#00D4FF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="big-circle-center">
+            <span class="big-score">78</span>
+            <span class="big-score-label">/ 100</span>
+          </div>
+        </div>
+        <div class="score-grade">&#9989; Good Score</div>
+        <p class="score-desc">Your resume is well-optimized for ATS systems. A few targeted improvements can push your score above 90 and significantly increase interview callbacks.</p>
+        <div class="score-actions">
+          <a href="resume-upload.html" class="btn-primary" style="font-size:13px;padding:10px 20px">Improve Resume</a>
+          <a href="jobs.html" class="btn-outline" style="font-size:13px;padding:10px 20px">View Jobs</a>
+        </div>
+      </div>
+
+      <div class="breakdown-panel">
+        <h3>Score Breakdown</h3>
+        <div class="breakdown-items">
+          <div class="breakdown-item">
+            <div class="bi-header">
+              <span class="bi-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Formatting & Structure</span>
+              <span class="bi-score" style="color:var(--accent-green)">90/100</span>
+            </div>
+            <div class="bi-bar"><div class="bi-fill" style="width:90%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div></div>
+            <div class="bi-desc">Clean layout, proper section headers, no tables or graphics that confuse ATS parsers.</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="bi-header">
+              <span class="bi-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Keyword Density</span>
+              <span class="bi-score" style="color:var(--accent-green)">82/100</span>
+            </div>
+            <div class="bi-bar"><div class="bi-fill" style="width:82%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div></div>
+            <div class="bi-desc">Good keyword coverage. Missing some high-value terms like "Microservices" and "REST API".</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="bi-header">
+              <span class="bi-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Content Quality</span>
+              <span class="bi-score" style="color:var(--accent-amber)">70/100</span>
+            </div>
+            <div class="bi-bar"><div class="bi-fill" style="width:70%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
+            <div class="bi-desc">Descriptions are present but lack quantifiable achievements and impact metrics.</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="bi-header">
+              <span class="bi-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Action Verbs</span>
+              <span class="bi-score" style="color:var(--accent-amber)">65/100</span>
+            </div>
+            <div class="bi-bar"><div class="bi-fill" style="width:65%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
+            <div class="bi-desc">Some weak verbs detected ("worked on", "helped with"). Replace with power verbs.</div>
+          </div>
+          <div class="breakdown-item">
+            <div class="bi-header">
+              <span class="bi-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Quantified Achievements</span>
+              <span class="bi-score" style="color:var(--accent-red)">55/100</span>
+            </div>
+            <div class="bi-bar"><div class="bi-fill" style="width:55%;background:linear-gradient(135deg,#EF4444,#DC2626)"></div></div>
+            <div class="bi-desc">Only 2 of 8 bullet points contain numbers or metrics. Add percentages, counts, and impact.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MID: KEYWORDS + ISSUES -->
+    <div class="ats-mid-grid">
+      <div class="panel">
+        <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Keyword Analysis</h3>
+        <div class="keyword-grid">
+          <span class="kw-tag found">Java ✓</span>
+          <span class="kw-tag found">SQL ✓</span>
+          <span class="kw-tag found">Python ✓</span>
+          <span class="kw-tag found">Git ✓</span>
+          <span class="kw-tag found">OOP ✓</span>
+          <span class="kw-tag found">HTML/CSS ✓</span>
+          <span class="kw-tag partial">React ~</span>
+          <span class="kw-tag partial">JavaScript ~</span>
+          <span class="kw-tag partial">MySQL ~</span>
+          <span class="kw-tag missing">Spring Boot ✗</span>
+          <span class="kw-tag missing">REST API ✗</span>
+          <span class="kw-tag missing">Microservices ✗</span>
+          <span class="kw-tag missing">Docker ✗</span>
+          <span class="kw-tag missing">Agile ✗</span>
+          <span class="kw-tag missing">CI/CD ✗</span>
+        </div>
+        <div class="kw-legend">
+          <span style="color:var(--accent-green)">✓ Found (6)</span>
+          <span style="color:var(--accent-amber)">~ Partial (3)</span>
+          <span style="color:var(--accent-red)">✗ Missing (6)</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Issues Found</h3>
+        <div class="issue-list">
+          <div class="issue-item critical"><div class="issue-dot"></div><div class="issue-content"><h4>No quantified achievements</h4><p>Add numbers to at least 5 bullet points to improve ATS ranking and recruiter appeal.</p></div></div>
+          <div class="issue-item critical"><div class="issue-dot"></div><div class="issue-content"><h4>Missing high-demand keywords</h4><p>Spring Boot, REST API, and Microservices appear in 80%+ of Java job descriptions.</p></div></div>
+          <div class="issue-item warning"><div class="issue-dot"></div><div class="issue-content"><h4>Weak action verbs detected</h4><p>"Worked on", "Helped with" found in 3 bullet points. Replace with stronger verbs.</p></div></div>
+          <div class="issue-item warning"><div class="issue-dot"></div><div class="issue-content"><h4>No LinkedIn URL in contact</h4><p>Adding your LinkedIn profile increases recruiter trust and callback rates by 40%.</p></div></div>
+          <div class="issue-item info"><div class="issue-dot"></div><div class="issue-content"><h4>Consider adding a summary</h4><p>A 2-3 line professional summary at the top helps ATS systems categorize your profile.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOB COMPARISON -->
+    <div class="comparison-section">
+      <h3>Resume vs Job Requirements</h3>
+      <div class="job-selector">
+        <button class="job-sel-btn active" onclick="selectJob(this,'TCS Java Developer')">TCS Java Dev</button>
+        <button class="job-sel-btn" onclick="selectJob(this,'Infosys Python Dev')">Infosys Python Dev</button>
+        <button class="job-sel-btn" onclick="selectJob(this,'Wipro Web Dev')">Wipro Web Dev</button>
+        <button class="job-sel-btn" onclick="selectJob(this,'HCL Backend Dev')">HCL Backend Dev</button>
+      </div>
+      <table class="comp-table">
+        <thead><tr><th>Requirement</th><th>Job Needs</th><th>Your Level</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Java Programming</td><td>Advanced</td><td>Advanced</td><td><span class="status-dot match">Match</span></td></tr>
+          <tr><td>Spring Boot</td><td>Intermediate</td><td>Beginner</td><td><span class="status-dot partial">Partial</span></td></tr>
+          <tr><td>SQL / Database</td><td>Intermediate</td><td>Advanced</td><td><span class="status-dot match">Match</span></td></tr>
+          <tr><td>REST API Design</td><td>Intermediate</td><td>Not Listed</td><td><span class="status-dot missing">Missing</span></td></tr>
+          <tr><td>Microservices</td><td>Basic</td><td>Not Listed</td><td><span class="status-dot missing">Missing</span></td></tr>
+          <tr><td>Git / Version Control</td><td>Basic</td><td>Intermediate</td><td><span class="status-dot match">Match</span></td></tr>
+          <tr><td>Docker / Containers</td><td>Basic</td><td>Not Listed</td><td><span class="status-dot missing">Missing</span></td></tr>
+          <tr><td>Agile / Scrum</td><td>Basic</td><td>Not Listed</td><td><span class="status-dot missing">Missing</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- IMPROVEMENT STEPS -->
+    <div class="improve-section">
+      <h3>&#128640; How to Reach 90+ Score</h3>
+      <div class="improve-steps">
+        <div class="improve-step"><div class="step-num">1</div><h4>Add Missing Keywords</h4><p>Include "Spring Boot", "REST API", "Microservices", "Docker", and "Agile" in your skills section and project descriptions. This alone can add 8-10 points.</p></div>
+        <div class="improve-step"><div class="step-num">2</div><h4>Quantify Achievements</h4><p>Add metrics to every bullet: "Developed REST API serving 500+ daily requests", "Reduced query time by 35% using indexing". Target: 5+ quantified bullets.</p></div>
+        <div class="improve-step"><div class="step-num">3</div><h4>Upgrade Action Verbs</h4><p>Replace weak verbs with power verbs: "Worked on" → "Developed", "Helped with" → "Implemented", "Did" → "Architected". Adds 5-7 points.</p></div>
+        <div class="improve-step"><div class="step-num">4</div><h4>Add Professional Summary</h4><p>Write a 2-3 line summary: "Java Developer with 2+ years experience in Spring Boot and REST APIs, seeking backend roles in product companies." Adds 3-5 points.</p></div>
+        <div class="improve-step"><div class="step-num">5</div><h4>Add LinkedIn & GitHub</h4><p>Include your LinkedIn URL and GitHub profile in the contact section. Recruiters verify profiles and it signals professionalism. Adds 2-3 points.</p></div>
+        <div class="improve-step"><div class="step-num">6</div><h4>Tailor Per Application</h4><p>Customize your resume for each job by mirroring the exact keywords from the job description. A tailored resume scores 15-20 points higher on average.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+<script>
+function selectJob(btn, jobName) {
+  document.querySelectorAll('.job-sel-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  showToast('📊 Comparing resume against ' + jobName);
+}
+</script>
+</body>
+</html>

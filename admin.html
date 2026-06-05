@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard — CareerMatch AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.admin-layout { display: flex; min-height: 100vh; background: var(--bg-primary); }
+.admin-sidebar { width: 240px; background: var(--bg-card); border-right: 1px solid var(--border); padding: 24px 0; position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; z-index: 100; }
+.admin-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.admin-logo .logo-text { font-family: var(--font-display); font-size: 18px; font-weight: 800; }
+.admin-logo .admin-badge { display: inline-block; padding: 2px 8px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25); border-radius: 100px; font-size: 10px; font-weight: 700; color: var(--accent-red); margin-left: 6px; }
+.sidebar-nav { flex: 1; padding: 0 12px; }
+.sidebar-section { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; padding: 0 8px; margin: 16px 0 6px; }
+.sidebar-link { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; margin-bottom: 2px; text-decoration: none; }
+.sidebar-link:hover { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+.sidebar-link.active { background: rgba(108,99,255,0.12); color: var(--accent-violet); }
+.sidebar-link .badge { margin-left: auto; padding: 2px 7px; background: rgba(239,68,68,0.15); border-radius: 100px; font-size: 10px; font-weight: 700; color: var(--accent-red); }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+.admin-user { display: flex; align-items: center; gap: 10px; }
+.admin-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gradient-main); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: white; }
+.admin-user-info { flex: 1; }
+.admin-user-name { font-size: 13px; font-weight: 700; }
+.admin-user-role { font-size: 11px; color: var(--text-muted); }
+.admin-main { margin-left: 240px; flex: 1; padding: 32px; }
+.admin-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+.admin-topbar h1 { font-size: 22px; font-weight: 800; }
+.admin-topbar p { font-size: 13px; color: var(--text-muted); }
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+.date-badge { padding: 7px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 12px; color: var(--text-muted); }
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 20px; }
+.stat-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+.stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.stat-change { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 100px; }
+.stat-change.up { background: rgba(52,211,153,0.12); color: var(--accent-green); }
+.stat-change.down { background: rgba(239,68,68,0.12); color: var(--accent-red); }
+.stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--text-muted); }
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.admin-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 22px; }
+.admin-panel h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; }
+.panel-action { font-size: 12px; color: var(--accent-violet); cursor: pointer; font-weight: 600; }
+.chart-bars { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
+.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.chart-bar { width: 100%; border-radius: 4px 4px 0 0; transition: all 0.3s; cursor: pointer; }
+.chart-bar:hover { opacity: 0.8; }
+.chart-label { font-size: 10px; color: var(--text-muted); }
+.chart-val { font-size: 10px; font-weight: 700; color: var(--text-secondary); }
+.donut-wrap { display: flex; align-items: center; gap: 20px; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { display: flex; flex-direction: column; gap: 10px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-label { color: var(--text-muted); }
+.legend-val { margin-left: auto; font-weight: 700; font-size: 13px; }
+.users-table { width: 100%; border-collapse: collapse; }
+.users-table th { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.users-table td { padding: 11px 12px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.users-table tr:last-child td { border-bottom: none; }
+.users-table tr:hover td { background: rgba(255,255,255,0.02); }
+.user-cell { display: flex; align-items: center; gap: 10px; }
+.user-av { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: white; flex-shrink: 0; }
+.user-name { font-weight: 600; }
+.user-email { font-size: 11px; color: var(--text-muted); }
+.status-pill { padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.status-pill.active { background: rgba(52,211,153,0.12); color: var(--accent-green); }
+.status-pill.pending { background: rgba(245,158,11,0.12); color: var(--accent-amber); }
+.status-pill.inactive { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+.activity-list { display: flex; flex-direction: column; gap: 12px; }
+.activity-item { display: flex; gap: 12px; align-items: flex-start; }
+.activity-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.activity-content { flex: 1; }
+.activity-text { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.activity-time { font-size: 11px; color: var(--text-muted); }
+.system-health { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.health-item { padding: 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.health-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.health-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.health-fill { height: 100%; border-radius: 3px; }
+.full-panel { grid-column: 1 / -1; }
+@media (max-width: 1024px) { .admin-sidebar { display: none; } .admin-main { margin-left: 0; } .stats-row { grid-template-columns: repeat(2,1fr); } .admin-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="logo-text">CareerMatch <span class="logo-ai">AI</span><span class="admin-badge">ADMIN</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Overview</div>
+      <a class="sidebar-link active" onclick="showToast('📊 Dashboard loaded')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a class="sidebar-link" onclick="showToast('📈 Loading analytics...')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+      </a>
+
+      <div class="sidebar-section">Management</div>
+      <a class="sidebar-link" onclick="showToast('👥 Loading users...')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Users
+        <span class="badge">3</span>
+      </a>
+      <a class="sidebar-link" onclick="showToast('💼 Loading jobs...')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Job Listings
+      </a>
+      <a class="sidebar-link" onclick="showToast('📄 Loading resumes...')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Resumes
+      </a>
+      <a href="resume-templates.html" class="sidebar-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        Resume Templates
+      </a>
+      <a class="sidebar-link" onclick="showToast('🏫 Loading colleges...')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Colleges
+      </a>
+
+      <div class="sidebar-section">System</div>
+      <a class="sidebar-link" onclick="showToast('⚙️ Loading settings...')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M20 12h2M2 12h2M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/></svg>
+        Settings
+      </a>
+      <a href="index.html" class="sidebar-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Back to Site
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-avatar">AD</div>
+        <div class="admin-user-info">
+          <div class="admin-user-name">Admin User</div>
+          <div class="admin-user-role">Super Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1>Admin <span class="gradient-text">Dashboard</span></h1>
+        <p>Platform overview · Last updated: Today, 10:45 AM</p>
+      </div>
+      <div class="topbar-actions">
+        <span class="date-badge">📅 May 22, 2026</span>
+        <button class="btn-primary" style="font-size:13px;padding:9px 18px" onclick="showToast('📊 Generating report...')">Export Report</button>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon" style="background:rgba(108,99,255,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <span class="stat-change up">↑ 12%</span>
+        </div>
+        <div class="stat-num" style="background:var(--gradient-main);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">8,432</div>
+        <div class="stat-label">Total Students</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon" style="background:rgba(52,211,153,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+          <span class="stat-change up">↑ 8%</span>
+        </div>
+        <div class="stat-num" style="color:var(--accent-green)">1,247</div>
+        <div class="stat-label">Active Job Listings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon" style="background:rgba(0,212,255,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <span class="stat-change up">↑ 23%</span>
+        </div>
+        <div class="stat-num" style="color:var(--accent-cyan)">3,891</div>
+        <div class="stat-label">Resumes Analyzed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <div class="stat-icon" style="background:rgba(245,158,11,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <span class="stat-change up">↑ 31%</span>
+        </div>
+        <div class="stat-num" style="color:var(--accent-amber)">642</div>
+        <div class="stat-label">Placements This Month</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="admin-grid">
+      <!-- BAR CHART: Monthly Registrations -->
+      <div class="admin-panel">
+        <h3>Monthly Registrations <span class="panel-action" onclick="showToast('📈 Viewing full chart...')">View All</span></h3>
+        <div class="chart-bars">
+          <div class="chart-bar-wrap"><div class="chart-val">420</div><div class="chart-bar" style="height:42%;background:linear-gradient(to top,#6C63FF,#A78BFA)" title="420"></div><div class="chart-label">Dec</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">510</div><div class="chart-bar" style="height:51%;background:linear-gradient(to top,#6C63FF,#A78BFA)"></div><div class="chart-label">Jan</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">480</div><div class="chart-bar" style="height:48%;background:linear-gradient(to top,#6C63FF,#A78BFA)"></div><div class="chart-label">Feb</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">620</div><div class="chart-bar" style="height:62%;background:linear-gradient(to top,#6C63FF,#A78BFA)"></div><div class="chart-label">Mar</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">750</div><div class="chart-bar" style="height:75%;background:linear-gradient(to top,#6C63FF,#A78BFA)"></div><div class="chart-label">Apr</div></div>
+          <div class="chart-bar-wrap"><div class="chart-val">890</div><div class="chart-bar" style="height:89%;background:linear-gradient(to top,#00D4FF,#6C63FF)"></div><div class="chart-label">May</div></div>
+        </div>
+      </div>
+
+      <!-- DONUT: Placement by Domain -->
+      <div class="admin-panel">
+        <h3>Placements by Domain <span class="panel-action" onclick="showToast('📊 Viewing breakdown...')">Details</span></h3>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(108,99,255,0.15)" stroke-width="18"/>
+            <!-- Java: 38% -->
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#6C63FF" stroke-width="18" stroke-dasharray="95.3 156.7" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+            <!-- Python: 24% -->
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#00D4FF" stroke-width="18" stroke-dasharray="60.3 191.7" stroke-dashoffset="-95.3" transform="rotate(-90 55 55)"/>
+            <!-- Web: 20% -->
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#34D399" stroke-width="18" stroke-dasharray="50.3 201.7" stroke-dashoffset="-155.6" transform="rotate(-90 55 55)"/>
+            <!-- Data: 18% -->
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#F59E0B" stroke-width="18" stroke-dasharray="45.2 206.8" stroke-dashoffset="-205.9" transform="rotate(-90 55 55)"/>
+            <text x="55" y="51" text-anchor="middle" fill="white" font-size="14" font-weight="800" font-family="Syne">642</text>
+            <text x="55" y="64" text-anchor="middle" fill="#64748B" font-size="9">placed</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#6C63FF"></div><span class="legend-label">Java Dev</span><span class="legend-val">38%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#00D4FF"></div><span class="legend-label">Python Dev</span><span class="legend-val">24%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div><span class="legend-label">Web Dev</span><span class="legend-val">20%</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div><span class="legend-label">Data Analyst</span><span class="legend-val">18%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT USERS TABLE -->
+      <div class="admin-panel full-panel">
+        <h3>Recent Student Registrations <span class="panel-action" onclick="showToast('👥 Loading all users...')">View All Users</span></h3>
+        <table class="users-table">
+          <thead><tr><th>Student</th><th>College</th><th>Branch</th><th>ATS Score</th><th>Status</th><th>Joined</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:linear-gradient(135deg,#6C63FF,#00D4FF)">RK</div><div><div class="user-name">Rahul Kumar</div><div class="user-email">rahul.k@example.com</div></div></div></td>
+              <td>VIT Pune</td><td>CSE</td><td><span style="color:var(--accent-green);font-weight:700">78/100</span></td>
+              <td><span class="status-pill active">Active</span></td><td>Today</td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">PS</div><div><div class="user-name">Priya Sharma</div><div class="user-email">priya.s@example.com</div></div></div></td>
+              <td>COEP Pune</td><td>IT</td><td><span style="color:var(--accent-amber);font-weight:700">65/100</span></td>
+              <td><span class="status-pill active">Active</span></td><td>Yesterday</td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:linear-gradient(135deg,#34D399,#0EA5E9)">AM</div><div><div class="user-name">Arjun Mehta</div><div class="user-email">arjun.m@example.com</div></div></div></td>
+              <td>PICT Pune</td><td>CSE</td><td><span style="color:var(--accent-green);font-weight:700">82/100</span></td>
+              <td><span class="status-pill pending">Pending</span></td><td>2 days ago</td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:linear-gradient(135deg,#EC4899,#8B5CF6)">SJ</div><div><div class="user-name">Sneha Joshi</div><div class="user-email">sneha.j@example.com</div></div></div></td>
+              <td>MIT Pune</td><td>ECE</td><td><span style="color:var(--accent-red);font-weight:700">54/100</span></td>
+              <td><span class="status-pill inactive">Inactive</span></td><td>3 days ago</td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-av" style="background:linear-gradient(135deg,#0EA5E9,#6C63FF)">VP</div><div><div class="user-name">Vikram Patil</div><div class="user-email">vikram.p@example.com</div></div></div></td>
+              <td>SPPU Pune</td><td>MCA</td><td><span style="color:var(--accent-green);font-weight:700">71/100</span></td>
+              <td><span class="status-pill active">Active</span></td><td>4 days ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ACTIVITY FEED -->
+      <div class="admin-panel">
+        <h3>Recent Activity <span class="panel-action" onclick="showToast('📋 Loading full log...')">View Log</span></h3>
+        <div class="activity-list">
+          <div class="activity-item"><div class="activity-icon" style="background:rgba(52,211,153,0.12)">✅</div><div class="activity-content"><div class="activity-text">Rahul Kumar applied to TCS Java Developer</div><div class="activity-time">2 minutes ago</div></div></div>
+          <div class="activity-item"><div class="activity-icon" style="background:rgba(108,99,255,0.12)">📄</div><div class="activity-content"><div class="activity-text">Priya Sharma uploaded new resume (v2)</div><div class="activity-time">15 minutes ago</div></div></div>
+          <div class="activity-item"><div class="activity-icon" style="background:rgba(0,212,255,0.12)">🏢</div><div class="activity-content"><div class="activity-text">Infosys posted 5 new job listings</div><div class="activity-time">1 hour ago</div></div></div>
+          <div class="activity-item"><div class="activity-icon" style="background:rgba(245,158,11,0.12)">🎓</div><div class="activity-content"><div class="activity-text">Arjun Mehta completed skill gap analysis</div><div class="activity-time">2 hours ago</div></div></div>
+          <div class="activity-item"><div class="activity-icon" style="background:rgba(239,68,68,0.12)">⚠️</div><div class="activity-content"><div class="activity-text">3 new user reports flagged for review</div><div class="activity-time">3 hours ago</div></div></div>
+          <div class="activity-item"><div class="activity-icon" style="background:rgba(52,211,153,0.12)">🎉</div><div class="activity-content"><div class="activity-text">Vikram Patil accepted offer at Wipro</div><div class="activity-time">5 hours ago</div></div></div>
+        </div>
+      </div>
+
+      <!-- SYSTEM HEALTH -->
+      <div class="admin-panel">
+        <h3>System Health <span class="panel-action" onclick="showToast('🔧 Opening system monitor...')">Monitor</span></h3>
+        <div class="system-health">
+          <div class="health-item">
+            <div class="health-label"><span>API Server</span><span style="color:var(--accent-green);font-weight:700">98%</span></div>
+            <div class="health-bar"><div class="health-fill" style="width:98%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div></div>
+          </div>
+          <div class="health-item">
+            <div class="health-label"><span>AI Engine</span><span style="color:var(--accent-green);font-weight:700">95%</span></div>
+            <div class="health-bar"><div class="health-fill" style="width:95%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div></div>
+          </div>
+          <div class="health-item">
+            <div class="health-label"><span>Database</span><span style="color:var(--accent-amber);font-weight:700">72%</span></div>
+            <div class="health-bar"><div class="health-fill" style="width:72%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
+          </div>
+          <div class="health-item">
+            <div class="health-label"><span>Storage</span><span style="color:var(--accent-amber);font-weight:700">68%</span></div>
+            <div class="health-bar"><div class="health-fill" style="width:68%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div></div>
+          </div>
+          <div class="health-item">
+            <div class="health-label"><span>CDN</span><span style="color:var(--accent-green);font-weight:700">100%</span></div>
+            <div class="health-bar"><div class="health-fill" style="width:100%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div></div>
+          </div>
+          <div class="health-item">
+            <div class="health-label"><span>Email Service</span><span style="color:var(--accent-green);font-weight:700">99%</span></div>
+            <div class="health-bar"><div class="health-fill" style="width:99%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>

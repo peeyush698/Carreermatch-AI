@@ -1,0 +1,10 @@
+# Ignore backend environment variables
+backend/.env
+
+# Ignore Python cache and temporary files
+**/__pycache__/
+*.pyc
+backend/app.py.bak
+
+# Ignore local database if you don't want to upload it
+backend/database.db

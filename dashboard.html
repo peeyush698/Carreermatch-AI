@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard — CareerMatch AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .dashboard-main {
+      background: var(--bg-primary);
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .topbar-left h1 {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .topbar-left p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      padding: 9px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .topbar-btn:hover {
+      border-color: rgba(108, 99, 255, 0.3);
+      color: var(--text-primary);
+    }
+
+    .user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6C63FF, #00D4FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(108, 99, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .sc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .sc-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sc-trend {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 100px;
+    }
+
+    .sc-trend.up {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--accent-green);
+    }
+
+    .sc-trend.down {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-red);
+    }
+
+    .sc-num {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .sc-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+    }
+
+    .chart-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .chart-card canvas {
+      width: 100% !important;
+    }
+
+    .jobs-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .panel-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .panel-link {
+      font-size: 12px;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .mini-job {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mini-job:last-child {
+      border-bottom: none;
+    }
+
+    .mj-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .mj-info {
+      flex: 1;
+    }
+
+    .mj-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .mj-company {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .mj-match {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .role-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .role-card:last-child {
+      border-bottom: none;
+    }
+
+    .role-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(108, 99, 255, 0.12);
+      border: 1px solid rgba(108, 99, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .role-info {
+      flex: 1;
+    }
+
+    .role-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .role-bar-wrap {
+      height: 5px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .role-bar-fill {
+      height: 100%;
+      background: var(--gradient-main);
+      border-radius: 3px;
+    }
+
+    .role-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-violet);
+    }
+
+    .skills-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .skill-name {
+      font-size: 13px;
+      font-weight: 600;
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .skill-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .skill-pct {
+      font-size: 12px;
+      color: var(--text-muted);
+      width: 36px;
+      text-align: right;
+    }
+
+    .alert-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: rgba(108, 99, 255, 0.08);
+      border: 1px solid rgba(108, 99, 255, 0.2);
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+      background: var(--accent-purple);
+    }
+
+    .toggle-switch input:checked+.toggle-slider::before {
+      transform: translateX(20px);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .comp-side h4 {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .comp-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .charts-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .jobs-row,
+      .skills-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .charts-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+              <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#slg)" />
+              <path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round" />
+              <defs>
+                <linearGradient id="slg" x1="2" y1="2" x2="26" y2="26">
+                  <stop stop-color="#6C63FF" />
+                  <stop offset="1" stop-color="#00D4FF" />
+                </linearGradient>
+              </defs>
+            </svg></div>
+          <span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="sidebar-link active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>Dashboard</a>
+        <a href="resume-upload.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>Upload Resume</a>
+        <a href="ats-score.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>ATS Score</a>
+        <a href="jobs.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+          </svg>Job Matches</a>
+        <a href="skill-gap.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+          </svg>Skill Gap</a>
+        <a href="skill-gap.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 8v4l3 3" />
+          </svg>Roadmap</a>
+        <a href="skill-gap.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>Interview Prep</a>
+        <div style="height:1px;background:var(--border);margin:12px 0"></div>
+        <a href="admin.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>Admin Panel</a>
+        <a href="index.html" class="sidebar-link"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          </svg>Home</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+      <div class="topbar">
+        <div class="topbar-left">
+          <h1>Welcome back, <span class="gradient-text">Mr..</span> 👋</h1>
+          <p>Here's your career progress overview</p>
+        </div>
+        <div class="topbar-right">
+          <a href="resume-upload.html" class="topbar-btn">+ Upload Resume</a>
+          <a href="jobs.html" class="topbar-btn">Browse Jobs</a>
+          <div class="user-avatar">RS</div>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="sc-header">
+            <div class="sc-icon" style="background:rgba(108,99,255,0.15)"><svg width="22" height="22"
+                viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg></div><span class="sc-trend up">+6pts</span>
+          </div>
+          <div class="sc-num gradient-text">78<span style="font-size:16px">/100</span></div>
+          <div class="sc-label">ATS Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-header">
+            <div class="sc-icon" style="background:rgba(0,212,255,0.12)"><svg width="22" height="22" viewBox="0 0 24 24"
+                fill="none" stroke="#00D4FF" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+              </svg></div><span class="sc-trend up">+12</span>
+          </div>
+          <div class="sc-num" style="color:#00D4FF">126</div>
+          <div class="sc-label">Jobs Found</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-header">
+            <div class="sc-icon" style="background:rgba(52,211,153,0.12)"><svg width="22" height="22"
+                viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg></div><span class="sc-trend up">+3%</span>
+          </div>
+          <div class="sc-num" style="color:#34D399">89%</div>
+          <div class="sc-label">Best Match</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-header">
+            <div class="sc-icon" style="background:rgba(245,158,11,0.12)"><svg width="22" height="22"
+                viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg></div><span class="sc-trend down">5 left</span>
+          </div>
+          <div class="sc-num" style="color:#F59E0B">5</div>
+          <div class="sc-label">Missing Skills</div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>Skill Radar</h3>
+          <canvas id="skillChart" width="220" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Job Categories</h3>
+          <canvas id="categoryChart" width="220" height="220"></canvas>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+            <span style="font-size:11px;color:var(--text-muted)"><span style="color:#6C63FF">●</span> Backend 45%</span>
+            <span style="font-size:11px;color:var(--text-muted)"><span style="color:#00D4FF">●</span> Frontend
+              30%</span>
+            <span style="font-size:11px;color:var(--text-muted)"><span style="color:#34D399">●</span> Full Stack
+              15%</span>
+            <span style="font-size:11px;color:var(--text-muted)"><span style="color:#F59E0B">●</span> Data 10%</span>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Resume Strength</h3>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+                <span>Keywords</span><span style="color:var(--accent-green)">82%</span>
+              </div>
+              <div class="progress-bar-wrap" style="height:8px">
+                <div class="progress-bar-fill" style="width:82%"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+                <span>Formatting</span><span style="color:var(--accent-green)">90%</span>
+              </div>
+              <div class="progress-bar-wrap" style="height:8px">
+                <div class="progress-bar-fill" style="width:90%"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+                <span>Content</span><span style="color:var(--accent-amber)">70%</span>
+              </div>
+              <div class="progress-bar-wrap" style="height:8px">
+                <div class="progress-bar-fill" style="width:70%;background:linear-gradient(135deg,#F59E0B,#EF4444)">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span>Action
+                  Verbs</span><span style="color:var(--accent-amber)">65%</span></div>
+              <div class="progress-bar-wrap" style="height:8px">
+                <div class="progress-bar-fill" style="width:65%;background:linear-gradient(135deg,#F59E0B,#EF4444)">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+                <span>Achievements</span><span style="color:var(--accent-red)">55%</span>
+              </div>
+              <div class="progress-bar-wrap" style="height:8px">
+                <div class="progress-bar-fill" style="width:55%;background:linear-gradient(135deg,#EF4444,#DC2626)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JOBS + ROLES -->
+      <div class="jobs-row">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Top Job Matches</h3><a href="jobs.html" class="panel-link">View All →</a>
+          </div>
+          <div class="mini-job">
+            <div class="mj-logo" style="background:linear-gradient(135deg,#6C63FF,#00D4FF)">TCS</div>
+            <div class="mj-info">
+              <div class="mj-title">Java Developer</div>
+              <div class="mj-company">TCS · Pune · ₹4-6 LPA</div>
+            </div><span class="mj-match" style="color:var(--accent-green)">89%</span>
+          </div>
+          <div class="mini-job">
+            <div class="mj-logo" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">INF</div>
+            <div class="mj-info">
+              <div class="mj-title">Python Developer</div>
+              <div class="mj-company">Infosys · Bengaluru · ₹3.5-5 LPA</div>
+            </div><span class="mj-match" style="color:var(--accent-green)">82%</span>
+          </div>
+          <div class="mini-job">
+            <div class="mj-logo" style="background:linear-gradient(135deg,#34D399,#0EA5E9)">WIP</div>
+            <div class="mj-info">
+              <div class="mj-title">Web Developer</div>
+              <div class="mj-company">Wipro · Hyderabad · ₹3-4.5 LPA</div>
+            </div><span class="mj-match" style="color:var(--accent-amber)">76%</span>
+          </div>
+          <div class="mini-job">
+            <div class="mj-logo" style="background:linear-gradient(135deg,#A78BFA,#6C63FF)">HCL</div>
+            <div class="mj-info">
+              <div class="mj-title">Backend Developer</div>
+              <div class="mj-company">HCL · Noida · ₹4-7 LPA</div>
+            </div><span class="mj-match" style="color:var(--accent-amber)">71%</span>
+          </div>
+          <div class="mini-job">
+            <div class="mj-logo" style="background:linear-gradient(135deg,#0EA5E9,#6C63FF)">COG</div>
+            <div class="mj-info">
+              <div class="mj-title">Full Stack Developer</div>
+              <div class="mj-company">Cognizant · Chennai · ₹3.5-5.5 LPA</div>
+            </div><span class="mj-match" style="color:var(--accent-amber)">68%</span>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Role Predictions</h3><span style="font-size:12px;color:var(--text-muted)">AI Recommended</span>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">☕</div>
+            <div class="role-info">
+              <div class="role-name">Java Developer</div>
+              <div class="role-bar-wrap">
+                <div class="role-bar-fill" style="width:85%"></div>
+              </div>
+            </div><span class="role-pct">85%</span>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">⚙️</div>
+            <div class="role-info">
+              <div class="role-name">Backend Developer</div>
+              <div class="role-bar-wrap">
+                <div class="role-bar-fill" style="width:78%"></div>
+              </div>
+            </div><span class="role-pct">78%</span>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">🌐</div>
+            <div class="role-info">
+              <div class="role-name">Web Developer</div>
+              <div class="role-bar-wrap">
+                <div class="role-bar-fill" style="width:72%"></div>
+              </div>
+            </div><span class="role-pct">72%</span>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">🗄️</div>
+            <div class="role-info">
+              <div class="role-name">Database Engineer</div>
+              <div class="role-bar-wrap">
+                <div class="role-bar-fill" style="width:65%"></div>
+              </div>
+            </div><span class="role-pct">65%</span>
+          </div>
+          <div class="role-card">
+            <div class="role-icon">🐍</div>
+            <div class="role-info">
+              <div class="role-name">Python Developer</div>
+              <div class="role-bar-wrap">
+                <div class="role-bar-fill" style="width:60%"></div>
+              </div>
+            </div><span class="role-pct">60%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKILLS + COMPARISON -->
+      <div class="skills-row">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Your Skills</h3><a href="skill-gap.html" class="panel-link">Full Analysis →</a>
+          </div>
+          <div class="skill-list">
+            <div class="skill-row"><span class="skill-name">Java</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:85%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct">85%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">SQL</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:80%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct">80%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">Python</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:72%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct">72%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">React</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:65%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div>
+              </div><span class="skill-pct">65%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">Spring Boot</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:55%;background:linear-gradient(135deg,#EF4444,#DC2626)"></div>
+              </div><span class="skill-pct">55%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">Git</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:75%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct">75%</span>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Resume vs Job Comparison</h3>
+          </div>
+          <div class="comparison-grid">
+            <div class="comp-side">
+              <h4>Your Skills</h4>
+              <div class="comp-skills" id="resumeSkillsComp"></div>
+            </div>
+            <div class="comp-side">
+              <h4>Job Required</h4>
+              <div class="comp-skills" id="jobSkillsComp"></div>
+            </div>
+          </div>
+          <div
+            style="margin-top:16px;padding:14px;background:rgba(108,99,255,0.08);border:1px solid rgba(108,99,255,0.2);border-radius:var(--radius-md)">
+            <div style="font-size:12px;font-weight:700;color:var(--accent-violet);margin-bottom:6px">Missing Skills to
+              Add:</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <span class="skill-badge missing">Spring Boot</span>
+              <span class="skill-badge missing">REST API</span>
+              <span class="skill-badge missing">Docker</span>
+              <span class="skill-badge missing">MySQL</span>
+              <span class="skill-badge missing">Microservices</span>
+            </div>
+          </div>
+          <div class="alert-toggle">
+            <label class="toggle-switch"><input type="checkbox" onchange="toggleJobAlert(this)" /><span
+                class="toggle-slider"></span></label>
+            <span style="font-size:13px;font-weight:600">Enable Job Alerts</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+
+</html>

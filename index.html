@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerMatch AI — AI-Powered Resume Analyzer &amp; Job Recommender</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#lg1)" />
+            <path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <defs>
+              <linearGradient id="lg1" x1="2" y1="2" x2="26" y2="26">
+                <stop stop-color="#6C63FF" />
+                <stop offset="1" stop-color="#00D4FF" />
+              </linearGradient>
+            </defs>
+          </svg></div>
+        <span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="resume-upload.html" class="nav-link">Upload Resume</a></li>
+        <li><a href="jobs.html" class="nav-link">Jobs</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="auth.html" class="btn-ghost">Login</a>
+        <a href="auth.html" class="btn-primary-sm">Get Started</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge"><span class="badge-dot"></span>AI-Powered Career Intelligence Platform</div>
+        <h1 class="hero-title">Find Your Best<br /><span class="gradient-text">Job Match</span><br />with AI</h1>
+        <p class="hero-subtitle">Upload your resume and let AI analyze your skills, calculate ATS score, recommend
+          suitable jobs, identify missing skills, and prepare you for interviews.</p>
+        <div class="hero-actions">
+          <a href="resume-upload.html" class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Upload Resume
+          </a>
+          <a href="dashboard.html" class="btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+            View Demo
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item"><span class="stat-num">50K+</span><span class="stat-label">Resumes Analyzed</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><span class="stat-num">200K+</span><span class="stat-label">Jobs Matched</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><span class="stat-num">95%</span><span class="stat-label">Success Rate</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="resume-scanner">
+          <div class="scanner-card">
+            <div class="scanner-header">
+              <div class="scanner-dots"><span></span><span></span><span></span></div>
+              <span class="scanner-title">Resume Analysis</span>
+            </div>
+            <div class="scanner-body">
+              <div class="scan-line"></div>
+              <div class="resume-preview">
+                <div class="rp-name">Your Name</div>
+                <div class="rp-role">MCA Final Year Student</div>
+                <div class="rp-skills">
+                  <span class="skill-chip">Java</span><span class="skill-chip">Python</span><span
+                    class="skill-chip">SQL</span><span class="skill-chip">React</span><span class="skill-chip">Spring
+                    Boot</span>
+                </div>
+                <div class="rp-bars">
+                  <div class="rp-bar-row"><span>Technical Skills</span>
+                    <div class="rp-bar">
+                      <div class="rp-fill" style="width:82%"></div>
+                    </div><span>82%</span>
+                  </div>
+                  <div class="rp-bar-row"><span>Experience</span>
+                    <div class="rp-bar">
+                      <div class="rp-fill" style="width:65%"></div>
+                    </div><span>65%</span>
+                  </div>
+                  <div class="rp-bar-row"><span>Keywords</span>
+                    <div class="rp-bar">
+                      <div class="rp-fill" style="width:78%"></div>
+                    </div><span>78%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ats-badge">
+              <div class="ats-ring">
+                <svg viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(108,99,255,0.2)" stroke-width="6" />
+                  <circle cx="40" cy="40" r="32" fill="none" stroke="url(#ag)" stroke-width="6" stroke-dasharray="201"
+                    stroke-dashoffset="44" stroke-linecap="round" transform="rotate(-90 40 40)" />
+                  <defs>
+                    <linearGradient id="ag" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#6C63FF" />
+                      <stop offset="100%" stop-color="#00D4FF" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="ats-score-text"><span class="ats-num">78</span><span class="ats-label">ATS</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="floating-card fc-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00D4FF"
+              stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg><span>89% Match Found!</span></div>
+          <div class="floating-card fc-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA"
+              stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+            </svg><span>5 Skills Missing</span></div>
+          <div class="floating-card fc-3"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399"
+              stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+            </svg><span>126 Jobs Found</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-badge">Process</div>
+        <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+        <p class="section-subtitle">Five simple steps to land your dream job with AI-powered precision</p>
+      </div>
+      <div class="steps-flow">
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg></div>
+            <div class="step-num">01</div>
+          </div>
+          <h3>Upload Resume</h3>
+          <p>Drag and drop your PDF or DOCX resume. Our system accepts all standard formats.</p>
+        </div>
+        <div class="step-arrow">&#8594;</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg></div>
+            <div class="step-num">02</div>
+          </div>
+          <h3>AI Extracts Skills</h3>
+          <p>Our NLP engine parses your resume and extracts skills, experience, and keywords.</p>
+        </div>
+        <div class="step-arrow">&#8594;</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg></div>
+            <div class="step-num">03</div>
+          </div>
+          <h3>Get ATS Score</h3>
+          <p>Receive a detailed ATS compatibility score with actionable improvement tips.</p>
+        </div>
+        <div class="step-arrow">&#8594;</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5">
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+              </svg></div>
+            <div class="step-num">04</div>
+          </div>
+          <h3>Find Matching Jobs</h3>
+          <p>AI matches your profile with thousands of live job listings by compatibility.</p>
+        </div>
+        <div class="step-arrow">&#8594;</div>
+        <div class="step-item">
+          <div class="step-icon-wrap">
+            <div class="step-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.5">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg></div>
+            <div class="step-num">05</div>
+          </div>
+          <h3>Improve &amp; Prepare</h3>
+          <p>Get a personalized learning roadmap and AI-generated interview questions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-badge">Features</div>
+        <h2 class="section-title">Everything You Need to <span class="gradient-text">Succeed</span></h2>
+        <p class="section-subtitle">A complete AI-powered career toolkit built for students and freshers</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card feature-large">
+          <div class="feature-icon-wrap"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg></div>
+          <h3>ATS Score Analysis</h3>
+          <p>Get a detailed ATS compatibility score with keyword analysis, formatting tips, and improvement suggestions
+            to beat applicant tracking systems.</p>
+          <div class="feature-preview">
+            <div class="mini-ats">
+              <div class="mini-score">78<span>/100</span></div>
+              <div class="mini-label">ATS Score</div>
+            </div>
+            <div class="mini-bars">
+              <div class="mini-bar-row"><span>Keywords</span>
+                <div class="mini-bar">
+                  <div style="width:82%"></div>
+                </div>
+              </div>
+              <div class="mini-bar-row"><span>Format</span>
+                <div class="mini-bar">
+                  <div style="width:90%"></div>
+                </div>
+              </div>
+              <div class="mini-bar-row"><span>Content</span>
+                <div class="mini-bar">
+                  <div style="width:70%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="ats-score.html" class="feature-link">View ATS Analysis &#8594;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" />
+            </svg></div>
+          <h3>Smart Job Matching</h3>
+          <p>AI compares your skills with job requirements and ranks jobs by match percentage from top portals like
+            LinkedIn, Naukri, and Indeed.</p>
+          <a href="jobs.html" class="feature-link">Browse Jobs &#8594;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4l3 3" />
+            </svg></div>
+          <h3>Learning Roadmap</h3>
+          <p>Get a personalized 30-day learning plan to fill skill gaps and become job-ready faster with curated
+            resources.</p>
+          <a href="skill-gap.html" class="feature-link">View Roadmap &#8594;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+            </svg></div>
+          <h3>Interview Prep</h3>
+          <p>AI generates role-specific technical and HR interview questions to help you practice and ace interviews
+            with confidence.</p>
+          <a href="skill-gap.html" class="feature-link">Start Prep &#8594;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 00-3-3.87" />
+              <path d="M16 3.13a4 4 0 010 7.75" />
+            </svg></div>
+          <h3>Skill Gap Analysis</h3>
+          <p>Visual comparison of your current skills vs. required skills with color-coded gap identification and
+            suggestions.</p>
+          <a href="skill-gap.html" class="feature-link">Analyze Gaps &#8594;</a>
+        </div>
+        <div class="feature-card feature-large">
+          <div class="feature-icon-wrap"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg></div>
+          <h3>Smart Dashboard</h3>
+          <p>A beautiful analytics dashboard showing your ATS score, job matches, skill progress, and career insights
+            all in one place.</p>
+          <div class="feature-chips"><span>&#128202; Analytics</span><span>&#127919; Job Tracking</span><span>&#128200;
+              Progress</span><span>&#128276; Alerts</span></div>
+          <a href="dashboard.html" class="feature-link">Open Dashboard &#8594;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg></div>
+          <h3>Resume Tailoring</h3>
+          <p>One-click suggestions to tailor your resume for specific job descriptions with missing keywords and power
+            phrases.</p>
+          <a href="resume-upload.html" class="feature-link">Tailor Resume &#8594;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg></div>
+          <h3>Job Role Prediction</h3>
+          <p>AI predicts the most suitable job roles for you based on your complete skill profile, experience, and
+            education.</p>
+          <a href="dashboard.html" class="feature-link">See Predictions &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-choose">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-badge">Why Us</div>
+        <h2 class="section-title">Why Choose <span class="gradient-text">CareerMatch AI</span></h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">&#129302;</div>
+          <h3>Real AI Intelligence</h3>
+          <p>Advanced NLP and machine learning algorithms that understand context, not just keywords.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#9889;</div>
+          <h3>Instant Analysis</h3>
+          <p>Get complete resume analysis, ATS score, and job matches in under 30 seconds.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#127919;</div>
+          <h3>Precision Matching</h3>
+          <p>Our matching algorithm considers skills, experience, location, and salary expectations.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#128218;</div>
+          <h3>Built for Students</h3>
+          <p>Specifically designed for final year students and freshers entering the job market.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#128274;</div>
+          <h3>Privacy First</h3>
+          <p>Your resume data is encrypted and never shared with third parties without consent.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">&#127381;</div>
+          <h3>Free to Start</h3>
+          <p>Full access to core features at no cost. Premium features available for power users.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-badge">Testimonials</div>
+        <h2 class="section-title">Students Love <span class="gradient-text">CareerMatch AI</span></h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="tcard-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"CareerMatch AI helped me identify that I was missing Spring Boot and REST API skills. After completing the
+            roadmap, I got placed at TCS within 3 weeks!"</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar" style="background:linear-gradient(135deg,#6C63FF,#00D4FF)">RS</div>
+            <div>
+              <div class="tcard-name">Rahul Sharma</div>
+              <div class="tcard-role">MCA Graduate &mdash; TCS, Pune</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="tcard-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"The ATS score feature was a game-changer. My resume score went from 52 to 84 after following the
+            suggestions. Got 5 interview calls in one week!"</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">PK</div>
+            <div>
+              <div class="tcard-name">Priya Kumari</div>
+              <div class="tcard-role">B.Tech CSE &mdash; Infosys, Bengaluru</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="tcard-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p>"The interview question generator is incredible. It gave me exactly the questions I was asked in my Wipro
+            interview. Highly recommend to all freshers!"</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar" style="background:linear-gradient(135deg,#34D399,#0EA5E9)">AM</div>
+            <div>
+              <div class="tcard-name">Arjun Mehta</div>
+              <div class="tcard-role">MCA Final Year &mdash; Wipro, Hyderabad</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="section-badge">FAQ</div>
+        <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">What file formats does CareerMatch
+            AI support?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg></button>
+          <div class="faq-answer">
+            <p>CareerMatch AI supports PDF and DOCX (Microsoft Word) resume formats. We recommend PDF for best parsing
+              accuracy. Maximum file size is 5MB.</p>
+          </div>
+        </div>
+        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">How is the ATS score
+            calculated?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg></button>
+          <div class="faq-answer">
+            <p>The ATS score is calculated based on keyword density, formatting compatibility, section completeness,
+              action verbs usage, quantifiable achievements, and overall readability by automated systems.</p>
+          </div>
+        </div>
+        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Where do the job listings come
+            from?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg></button>
+          <div class="faq-answer">
+            <p>Jobs are aggregated from LinkedIn, Indeed, Naukri, Glassdoor, and company career pages. Our database is
+              updated daily with fresh listings from top Indian and global companies.</p>
+          </div>
+        </div>
+        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Is my resume data safe and
+            private?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg></button>
+          <div class="faq-answer">
+            <p>All resume data is encrypted using AES-256 encryption. We never share your personal information with
+              employers or third parties without your explicit consent.</p>
+          </div>
+        </div>
+        <div class="faq-item"><button class="faq-question" onclick="toggleFaq(this)">Can I use CareerMatch AI for
+            free?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg></button>
+          <div class="faq-answer">
+            <p>Yes! Core features including resume upload, ATS scoring, skill extraction, and basic job matching are
+              completely free. Premium features require a subscription.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="section-container">
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <div class="section-badge">Contact</div>
+          <h2 class="section-title">Get In <span class="gradient-text">Touch</span></h2>
+          <p>Have questions about CareerMatch AI? We are here to help students and freshers navigate their career
+            journey.</p>
+          <div class="contact-details">
+            <div class="contact-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg><span>support@careermatch.ai</span></div>
+            <div class="contact-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg><span>Pune, Maharashtra, India</span></div>
+          </div>
+        </div>
+        <form class="contact-form" onsubmit="handleContact(event)">
+          <div class="form-row">
+            <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name" required /></div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com" required />
+            </div>
+          </div>
+          <div class="form-group"><label>Subject</label><input type="text" placeholder="How can we help?" required />
+          </div>
+          <div class="form-group"><label>Message</label><textarea rows="4" placeholder="Tell us more..."
+              required></textarea></div>
+          <button type="submit" class="btn-primary" style="width:100%">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+              <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#flg)" />
+              <path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round" />
+              <defs>
+                <linearGradient id="flg" x1="2" y1="2" x2="26" y2="26">
+                  <stop stop-color="#6C63FF" />
+                  <stop offset="1" stop-color="#00D4FF" />
+                </linearGradient>
+              </defs>
+            </svg></div><span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span>
+        </a>
+        <p>AI-Powered Resume Analyzer and Smart Job Recommendation System for students and freshers.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Platform</h4><a href="resume-upload.html">Upload Resume</a><a href="ats-score.html">ATS Score</a><a
+            href="jobs.html">Job Matches</a><a href="skill-gap.html">Skill Gap</a><a href="dashboard.html">Dashboard</a>
+        </div>
+        <div class="footer-col">
+          <h4>Features</h4><a href="skill-gap.html">Learning Roadmap</a><a href="skill-gap.html">Interview Prep</a><a
+            href="jobs.html">Job Filters</a><a href="dashboard.html">Analytics</a><a href="admin.html">Admin Panel</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4><a href="#">About Us</a><a href="#contact">Contact</a><a href="#">Privacy Policy</a><a
+            href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&#169; 2025 CareerMatch AI &mdash; Built with &#10084;&#65039; Mr. Peeyush Chaurasiya </p>
+    </div>
+  </footer>
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+
+</html>

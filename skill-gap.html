@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Gap Analysis — CareerMatch AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .sg-page {
+      min-height: 100vh;
+      background: var(--bg-primary);
+      padding-top: 80px;
+    }
+
+    .sg-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .sg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .sg-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .sg-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .sg-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+
+    .sg-tab {
+      padding: 9px 20px;
+      border-radius: calc(var(--radius-md) - 2px);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+    }
+
+    .sg-tab.active {
+      background: var(--gradient-main);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* SKILL GAP TAB */
+    .skills-overview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .overview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .overview-num {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .overview-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .skills-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+    }
+
+    .skills-panel h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .skill-name {
+      width: 110px;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .skill-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .skill-pct {
+      width: 36px;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .gap-skills {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .gap-skill-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.15);
+      border-radius: var(--radius-md);
+    }
+
+    .gap-skill-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .gap-skill-info {
+      flex: 1;
+    }
+
+    .gap-skill-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .gap-skill-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .gap-skill-priority {
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .priority-high {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--accent-red);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .priority-med {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .priority-low {
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    /* ROADMAP TAB */
+    .roadmap-wrap {
+      position: relative;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      left: 23px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #6C63FF, #00D4FF);
+      opacity: 0.3;
+    }
+
+    .roadmap-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .roadmap-item {
+      display: flex;
+      gap: 20px;
+      padding-bottom: 32px;
+      position: relative;
+    }
+
+    .roadmap-dot {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      border: 2px solid;
+    }
+
+    .roadmap-dot.done {
+      background: rgba(52, 211, 153, 0.15);
+      border-color: var(--accent-green);
+    }
+
+    .roadmap-dot.active {
+      background: rgba(108, 99, 255, 0.15);
+      border-color: var(--accent-violet);
+    }
+
+    .roadmap-dot.upcoming {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+    }
+
+    .roadmap-content {
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .roadmap-phase {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .roadmap-phase.done {
+      color: var(--accent-green);
+    }
+
+    .roadmap-phase.active {
+      color: var(--accent-violet);
+    }
+
+    .roadmap-phase.upcoming {
+      color: var(--text-muted);
+    }
+
+    .roadmap-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .roadmap-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .roadmap-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .roadmap-skill {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(108, 99, 255, 0.1);
+      border: 1px solid rgba(108, 99, 255, 0.2);
+      color: var(--accent-violet);
+    }
+
+    .roadmap-duration {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .roadmap-resources {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .resource-link {
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .resource-link:hover {
+      border-color: rgba(108, 99, 255, 0.3);
+      color: var(--accent-violet);
+    }
+
+    /* INTERVIEW PREP TAB */
+    .interview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .interview-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+    }
+
+    .interview-panel h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .question-item {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .question-item:hover {
+      background: rgba(108, 99, 255, 0.06);
+      border-color: rgba(108, 99, 255, 0.2);
+    }
+
+    .question-item .q-text {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .question-item .q-meta {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .q-tag {
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .q-tag.easy {
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--accent-green);
+    }
+
+    .q-tag.medium {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent-amber);
+    }
+
+    .q-tag.hard {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--accent-red);
+    }
+
+    .prep-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: rgba(108, 99, 255, 0.05);
+    }
+
+    .check-box {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .check-item.checked .check-box {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+
+    .check-item.checked .check-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .check-text {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .mock-section {
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), rgba(0, 212, 255, 0.05));
+      border: 1px solid rgba(108, 99, 255, 0.2);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      text-align: center;
+    }
+
+    .mock-section h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .mock-section p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .mock-options {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .mock-btn {
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+      border: none;
+    }
+
+    .mock-btn.primary {
+      background: var(--gradient-main);
+      color: white;
+    }
+
+    .mock-btn.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .mock-btn:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .skills-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .interview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#sglg)" />
+            <path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round" />
+            <defs>
+              <linearGradient id="sglg" x1="2" y1="2" x2="26" y2="26">
+                <stop stop-color="#6C63FF" />
+                <stop offset="1" stop-color="#00D4FF" />
+              </linearGradient>
+            </defs>
+          </svg></div><span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="resume-upload.html" class="nav-link">Upload Resume</a></li>
+        <li><a href="jobs.html" class="nav-link">Jobs</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      </ul>
+      <div class="nav-actions"><a href="auth.html" class="btn-ghost">Login</a><a href="auth.html"
+          class="btn-primary-sm">Get Started</a></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="sg-page">
+    <div class="sg-container">
+      <div class="sg-header">
+        <div>
+          <h1>Skill Gap <span class="gradient-text">Analysis</span></h1>
+          <p>Personalized learning roadmap based on your resume and target roles</p>
+        </div>
+        <a href="jobs.html" class="btn-outline">View Matching Jobs</a>
+      </div>
+
+      <div class="sg-tabs">
+        <button class="sg-tab active" onclick="switchTab('gap')">Skill Gap</button>
+        <button class="sg-tab" onclick="switchTab('roadmap')">Learning Roadmap</button>
+        <button class="sg-tab" onclick="switchTab('interview')">Interview Prep</button>
+      </div>
+
+      <!-- TAB 1: SKILL GAP -->
+      <div class="tab-content active" id="tab-gap">
+        <div class="skills-overview">
+          <div class="overview-card">
+            <div class="overview-num"
+              style="background:var(--gradient-main);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">
+              12</div>
+            <div class="overview-label">Skills You Have</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-num" style="color:var(--accent-red)">6</div>
+            <div class="overview-label">Skills to Learn</div>
+          </div>
+          <div class="overview-card">
+            <div class="overview-num" style="color:var(--accent-amber)">8 wks</div>
+            <div class="overview-label">Est. Time to Close Gap</div>
+          </div>
+        </div>
+
+        <div class="skills-grid">
+          <div class="skills-panel">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg> Your Current Skills</h3>
+            <div class="skill-row"><span class="skill-name">Java</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:85%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-green)">85%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">SQL</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:80%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-green)">80%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">Python</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:70%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-violet)">70%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">HTML/CSS</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:65%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-violet)">65%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">JavaScript</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:60%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-violet)">60%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">React</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:50%;background:linear-gradient(135deg,#F59E0B,#EF4444)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-amber)">50%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">Git</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:75%;background:linear-gradient(135deg,#34D399,#0EA5E9)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-green)">75%</span>
+            </div>
+            <div class="skill-row"><span class="skill-name">MySQL</span>
+              <div class="skill-bar-wrap">
+                <div class="skill-bar-fill" style="width:70%;background:linear-gradient(135deg,#6C63FF,#00D4FF)"></div>
+              </div><span class="skill-pct" style="color:var(--accent-violet)">70%</span>
+            </div>
+          </div>
+
+          <div class="skills-panel">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg> Skills to Learn</h3>
+            <div class="gap-skills">
+              <div class="gap-skill-item">
+                <div class="gap-skill-icon">🔧</div>
+                <div class="gap-skill-info">
+                  <div class="gap-skill-name">Spring Boot</div>
+                  <div class="gap-skill-desc">Required in 85% of Java job descriptions</div>
+                </div>
+                <span class="gap-skill-priority priority-high">HIGH</span>
+              </div>
+              <div class="gap-skill-item">
+                <div class="gap-skill-icon">🌐</div>
+                <div class="gap-skill-info">
+                  <div class="gap-skill-name">REST API Design</div>
+                  <div class="gap-skill-desc">Core skill for backend development roles</div>
+                </div>
+                <span class="gap-skill-priority priority-high">HIGH</span>
+              </div>
+              <div class="gap-skill-item">
+                <div class="gap-skill-icon">🐳</div>
+                <div class="gap-skill-info">
+                  <div class="gap-skill-name">Docker</div>
+                  <div class="gap-skill-desc">Containerization for modern deployments</div>
+                </div>
+                <span class="gap-skill-priority priority-med">MED</span>
+              </div>
+              <div class="gap-skill-item">
+                <div class="gap-skill-icon">⚡</div>
+                <div class="gap-skill-info">
+                  <div class="gap-skill-name">Microservices</div>
+                  <div class="gap-skill-desc">Architecture pattern for scalable systems</div>
+                </div>
+                <span class="gap-skill-priority priority-med">MED</span>
+              </div>
+              <div class="gap-skill-item">
+                <div class="gap-skill-icon">🔄</div>
+                <div class="gap-skill-info">
+                  <div class="gap-skill-name">CI/CD Pipelines</div>
+                  <div class="gap-skill-desc">Jenkins, GitHub Actions for automation</div>
+                </div>
+                <span class="gap-skill-priority priority-low">LOW</span>
+              </div>
+              <div class="gap-skill-item">
+                <div class="gap-skill-icon">☁️</div>
+                <div class="gap-skill-info">
+                  <div class="gap-skill-name">AWS Basics</div>
+                  <div class="gap-skill-desc">Cloud fundamentals increasingly required</div>
+                </div>
+                <span class="gap-skill-priority priority-low">LOW</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: ROADMAP -->
+      <div class="tab-content" id="tab-roadmap">
+        <div class="roadmap-wrap">
+          <div class="roadmap-line"></div>
+          <div class="roadmap-items">
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot done">✓</div>
+              <div class="roadmap-content">
+                <div class="roadmap-phase done">Phase 1 — Completed</div>
+                <div class="roadmap-title">Core Java & OOP Foundations</div>
+                <div class="roadmap-desc">You've already mastered Java fundamentals, OOP concepts, data structures, and
+                  SQL. This is your strongest area and forms the base for everything ahead.</div>
+                <div class="roadmap-skills"><span class="roadmap-skill">Java</span><span
+                    class="roadmap-skill">OOP</span><span class="roadmap-skill">SQL</span><span
+                    class="roadmap-skill">Data Structures</span><span class="roadmap-skill">Git</span></div>
+                <div class="roadmap-duration"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg> Completed · 0 weeks remaining</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot active">🔥</div>
+              <div class="roadmap-content">
+                <div class="roadmap-phase active">Phase 2 — In Progress (Current)</div>
+                <div class="roadmap-title">Spring Boot & REST API Development</div>
+                <div class="roadmap-desc">Learn Spring Boot framework to build production-ready Java applications.
+                  Master REST API design principles, HTTP methods, status codes, and JSON handling. Build 2-3 mini
+                  projects to solidify concepts.</div>
+                <div class="roadmap-skills"><span class="roadmap-skill">Spring Boot</span><span
+                    class="roadmap-skill">REST API</span><span class="roadmap-skill">Spring MVC</span><span
+                    class="roadmap-skill">Hibernate</span><span class="roadmap-skill">JPA</span></div>
+                <div class="roadmap-duration"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg> 3 weeks · Estimated completion: June 2026</div>
+                <div class="roadmap-resources" style="margin-top:10px">
+                  <span class="resource-link" onclick="showToast('🎓 Opening Udemy Spring Boot course...')">📹 Udemy
+                    Course</span>
+                  <span class="resource-link" onclick="showToast('📖 Opening Spring.io docs...')">📖 Spring Docs</span>
+                  <span class="resource-link" onclick="showToast('💻 Opening GitHub projects...')">💻 Practice
+                    Projects</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot upcoming">3</div>
+              <div class="roadmap-content">
+                <div class="roadmap-phase upcoming">Phase 3 — Upcoming</div>
+                <div class="roadmap-title">Docker & Containerization</div>
+                <div class="roadmap-desc">Learn Docker to containerize your Spring Boot applications. Understand Docker
+                  images, containers, volumes, and networking. Create Dockerfiles and docker-compose configurations for
+                  multi-service apps.</div>
+                <div class="roadmap-skills"><span class="roadmap-skill">Docker</span><span class="roadmap-skill">Docker
+                    Compose</span><span class="roadmap-skill">Container Networking</span></div>
+                <div class="roadmap-duration"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg> 2 weeks · Starts after Phase 2</div>
+                <div class="roadmap-resources" style="margin-top:10px">
+                  <span class="resource-link" onclick="showToast('🐳 Opening Docker tutorial...')">🐳 Docker Docs</span>
+                  <span class="resource-link" onclick="showToast('📹 Opening YouTube tutorial...')">📹 YouTube
+                    Tutorial</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot upcoming">4</div>
+              <div class="roadmap-content">
+                <div class="roadmap-phase upcoming">Phase 4 — Upcoming</div>
+                <div class="roadmap-title">Microservices Architecture</div>
+                <div class="roadmap-desc">Understand microservices design patterns, service discovery, API gateways, and
+                  inter-service communication. Build a small microservices project using Spring Cloud and Docker.</div>
+                <div class="roadmap-skills"><span class="roadmap-skill">Microservices</span><span
+                    class="roadmap-skill">Spring Cloud</span><span class="roadmap-skill">API Gateway</span><span
+                    class="roadmap-skill">Service Discovery</span></div>
+                <div class="roadmap-duration"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg> 2 weeks · Starts after Phase 3</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot upcoming">5</div>
+              <div class="roadmap-content">
+                <div class="roadmap-phase upcoming">Phase 5 — Upcoming</div>
+                <div class="roadmap-title">CI/CD & Cloud Basics</div>
+                <div class="roadmap-desc">Set up CI/CD pipelines using GitHub Actions. Learn AWS fundamentals: EC2, S3,
+                  RDS. Deploy your Spring Boot application to AWS. This phase makes you job-ready for senior roles.
+                </div>
+                <div class="roadmap-skills"><span class="roadmap-skill">GitHub Actions</span><span
+                    class="roadmap-skill">AWS EC2</span><span class="roadmap-skill">AWS S3</span><span
+                    class="roadmap-skill">CI/CD</span></div>
+                <div class="roadmap-duration"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg> 1 week · Final phase</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: INTERVIEW PREP -->
+      <div class="tab-content" id="tab-interview">
+        <div class="interview-grid">
+          <div class="interview-panel">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg> Java Interview Questions</h3>
+            <div class="question-list">
+              <div class="question-item"
+                onclick="showToast('💡 Tip: Explain OOP with real examples from your projects!')">
+                <div class="q-text">Explain OOP concepts with examples</div>
+                <div class="q-meta"><span class="q-tag easy">Easy</span><span>Core Java</span></div>
+              </div>
+              <div class="question-item"
+                onclick="showToast('💡 Tip: Mention HashMap, ArrayList, LinkedList with time complexities!')">
+                <div class="q-text">What are Java Collections? Explain HashMap vs HashSet</div>
+                <div class="q-meta"><span class="q-tag medium">Medium</span><span>Collections</span></div>
+              </div>
+              <div class="question-item"
+                onclick="showToast('💡 Tip: Cover checked vs unchecked exceptions, try-catch-finally!')">
+                <div class="q-text">How does exception handling work in Java?</div>
+                <div class="q-meta"><span class="q-tag easy">Easy</span><span>Core Java</span></div>
+              </div>
+              <div class="question-item"
+                onclick="showToast('💡 Tip: Explain thread lifecycle, synchronization, and deadlocks!')">
+                <div class="q-text">Explain multithreading and synchronization</div>
+                <div class="q-meta"><span class="q-tag hard">Hard</span><span>Concurrency</span></div>
+              </div>
+              <div class="question-item"
+                onclick="showToast('💡 Tip: Cover lambda expressions, streams, Optional, and method references!')">
+                <div class="q-text">What are Java 8 features? Explain Streams API</div>
+                <div class="q-meta"><span class="q-tag medium">Medium</span><span>Java 8+</span></div>
+              </div>
+              <div class="question-item"
+                onclick="showToast('💡 Tip: Explain JVM memory model, heap, stack, and GC algorithms!')">
+                <div class="q-text">How does JVM memory management work?</div>
+                <div class="q-meta"><span class="q-tag hard">Hard</span><span>JVM</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="interview-panel">
+            <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2">
+                <path d="M9 11l3 3L22 4" />
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+              </svg> Interview Prep Checklist</h3>
+            <div class="prep-checklist">
+              <div class="check-item checked" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div><span class="check-text">Review Java OOP concepts</span>
+              </div>
+              <div class="check-item checked" onclick="toggleCheck(this)">
+                <div class="check-box">✓</div><span class="check-text">Practice SQL queries (JOINs, subqueries)</span>
+              </div>
+              <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div><span class="check-text">Build a Spring Boot REST API project</span>
+              </div>
+              <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div><span class="check-text">Solve 30 LeetCode Easy problems</span>
+              </div>
+              <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div><span class="check-text">Prepare STAR format answers for HR</span>
+              </div>
+              <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div><span class="check-text">Research target companies (TCS, Infosys)</span>
+              </div>
+              <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div><span class="check-text">Update LinkedIn with latest projects</span>
+              </div>
+              <div class="check-item" onclick="toggleCheck(this)">
+                <div class="check-box"></div><span class="check-text">Practice mock interview (30 min)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mock-section">
+          <h3>&#127919; Ready for a Mock Interview?</h3>
+          <p>Practice with our AI interviewer. Get real-time feedback on your answers, body language tips, and
+            confidence score.</p>
+          <div class="mock-options">
+            <button class="mock-btn primary" onclick="showToast('🎤 Starting AI Mock Interview... Get ready!')">Start
+              Mock Interview</button>
+            <button class="mock-btn secondary" onclick="showToast('📋 Loading question bank...')">Browse All
+              Questions</button>
+            <button class="mock-btn secondary" onclick="showToast('📊 Loading your interview history...')">View Past
+              Sessions</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.sg-tab').forEach((t, i) => {
+        const tabs = ['gap', 'roadmap', 'interview'];
+        t.classList.toggle('active', tabs[i] === tab);
+      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+    function toggleCheck(item) {
+      item.classList.toggle('checked');
+      const checked = document.querySelectorAll('.check-item.checked').length;
+      const total = document.querySelectorAll('.check-item').length;
+      showToast('✅ Progress: ' + checked + '/' + total + ' tasks completed!');
+    }
+  </script>
+</body>
+
+</html>

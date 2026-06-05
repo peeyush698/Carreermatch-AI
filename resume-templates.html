@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resume Templates — CareerMatch AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.templates-page { min-height: 100vh; background: var(--bg-primary); padding-top: 80px; }
+.templates-container { max-width: 1200px; margin: 0 auto; padding: 48px 24px; }
+.templates-header { text-align: center; margin-bottom: 40px; }
+.templates-header h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+.templates-header p { font-size: 16px; color: var(--text-muted); }
+
+/* Category tabs / filters */
+.filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; }
+.filter-btn { padding: 8px 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.filter-btn.active, .filter-btn:hover { background: rgba(108,99,255,0.12); border-color: rgba(108,99,255,0.3); color: var(--accent-violet); }
+
+/* Grid layout */
+.templates-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+@media (max-width: 900px) { .templates-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .templates-grid { grid-template-columns: 1fr; } }
+
+/* Card design */
+.template-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px; transition: all 0.3s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.template-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--gradient-main); opacity: 0; transition: opacity 0.3s; }
+.template-card:hover { background: var(--bg-card-hover); border-color: rgba(108,99,255,0.25); transform: translateY(-4px); box-shadow: var(--shadow-glow); }
+.template-card:hover::before { opacity: 1; }
+
+.tc-icon-wrap { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.08); }
+.tc-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+.tc-category { display: inline-block; padding: 4px 10px; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); border-radius: 100px; font-size: 11px; font-weight: 600; color: var(--accent-cyan); margin-bottom: 20px; align-self: flex-start; }
+.tc-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; margin-top: auto; }
+.tc-actions { display: flex; gap: 10px; }
+.tc-actions button { flex: 1; padding: 9px 12px; font-size: 13px; font-weight: 600; font-family: var(--font-body); border-radius: var(--radius-md); text-align: center; cursor: pointer; transition: all 0.2s; }
+.btn-preview { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text-secondary); }
+.btn-preview:hover { border-color: rgba(108,99,255,0.3); color: var(--text-primary); }
+.btn-download { background: var(--gradient-main); border: none; color: white; }
+.btn-download:hover { opacity: 0.9; }
+
+/* Admin upload section */
+.admin-section { background: var(--bg-card); border: 1px dashed rgba(108,99,255,0.4); border-radius: var(--radius-xl); padding: 32px; margin-bottom: 48px; display: none; }
+.admin-section h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.admin-section p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+.upload-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 768px) { .upload-form { grid-template-columns: 1fr; } }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.form-group input, .form-group select { padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-family: var(--font-body); font-size: 14px; transition: all 0.2s; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-purple); background: rgba(108,99,255,0.05); }
+.form-group select option { background: var(--bg-secondary); color: var(--text-primary); }
+.form-submit-row { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 10px; }
+</style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="url(#tlg)"/>
+          <path d="M9 14L12.5 17.5L19 11" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="tlg" x1="2" y1="2" x2="26" y2="26">
+              <stop stop-color="#6C63FF"/>
+              <stop offset="1" stop-color="#00D4FF"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="logo-text">CareerMatch <span class="logo-ai">AI</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="resume-upload.html" class="nav-link">Upload Resume</a></li>
+      <li><a href="jobs.html" class="nav-link">Jobs</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="auth.html" class="btn-ghost">Login</a>
+      <a href="auth.html" class="btn-primary-sm">Get Started</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="templates-page">
+  <div class="templates-container">
+    <div class="templates-header">
+      <div class="section-badge" style="display:inline-flex;margin-bottom:16px">Templates</div>
+      <h1>Professional <span class="gradient-text">Resume Templates</span></h1>
+      <p>Elevate your application with expert-curated and fully ATS-friendly resume layouts</p>
+    </div>
+
+    <!-- ADMIN UPLOAD AREA -->
+    <section class="admin-section" id="adminSection">
+      <h2>Admin Template Upload</h2>
+      <p>Upload official resume templates for student use. Only PDF and DOCX formats under 5MB are accepted.</p>
+      <form class="upload-form" id="uploadForm">
+        <div class="form-group">
+          <label for="templateTitle">Template Title</label>
+          <input type="text" id="templateTitle" placeholder="e.g., Software Engineer Classic" required/>
+        </div>
+        <div class="form-group">
+          <label for="templateCategory">Category Tag</label>
+          <select id="templateCategory" required>
+            <option value="Fresher">Fresher</option>
+            <option value="Software Developer">Software Developer</option>
+            <option value="Full Stack">Full Stack</option>
+            <option value="Data Science">Data Science</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label for="templateFile">Template File (PDF or DOCX)</label>
+          <input type="file" id="templateFile" accept=".pdf,.docx" required/>
+        </div>
+        <div class="form-submit-row">
+          <button type="submit" class="btn-primary" style="font-size: 13px; padding: 10px 24px;">Upload Template</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- CATEGORY FILTER TAGS -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterCategory(this, 'All')">All Templates</button>
+      <button class="filter-btn" onclick="filterCategory(this, 'Fresher')">Fresher</button>
+      <button class="filter-btn" onclick="filterCategory(this, 'Software Developer')">Software Developer</button>
+      <button class="filter-btn" onclick="filterCategory(this, 'Full Stack')">Full Stack</button>
+      <button class="filter-btn" onclick="filterCategory(this, 'Data Science')">Data Science</button>
+      <button class="filter-btn" onclick="filterCategory(this, 'General')">General</button>
+    </div>
+
+    <!-- TEMPLATES CARD GRID -->
+    <div class="templates-grid" id="templatesGrid">
+      <!-- Dynamic list -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+<script>
+const API_BASE = "http://127.0.0.1:5000";
+
+const user = getCurrentUser();
+if (!user) {
+    window.location.href = 'auth.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (user && user.role === 'admin') {
+        const adminSection = document.getElementById('adminSection');
+        if (adminSection) adminSection.style.display = 'block';
+    }
+    
+    loadTemplates();
+    
+    const uploadForm = document.getElementById('uploadForm');
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', handleUpload);
+    }
+});
+
+let allTemplates = [];
+
+async function loadTemplates() {
+    try {
+        const res = await fetch(`${API_BASE}/api/resume-templates`);
+        if (!res.ok) throw new Error('Failed to load templates');
+        allTemplates = await res.json();
+        renderTemplates('All');
+    } catch (err) {
+        console.error(err);
+        showToast('❌ Failed to retrieve resume templates.');
+    }
+}
+
+function renderTemplates(categoryFilter = 'All') {
+    const grid = document.getElementById('templatesGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    const filtered = categoryFilter === 'All' 
+        ? allTemplates 
+        : allTemplates.filter(t => t.category === categoryFilter);
+        
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 48px; color: var(--text-muted);">
+                <p style="font-size: 16px; margin-bottom: 8px;">No templates found in this category.</p>
+                <p style="font-size: 13px;">Upload some templates to get started.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    filtered.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'template-card';
+        
+        const isDocx = t.filename.endsWith('.docx');
+        const iconColor = isDocx ? 'var(--accent-cyan)' : 'var(--accent-red)';
+        const iconSvg = isDocx 
+            ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`
+            : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h3a1 1 0 000-2H9v2z"/><path d="M9 11v6"/></svg>`;
+            
+        card.innerHTML = `
+            <div class="tc-icon-wrap" style="background: rgba(255,255,255,0.03); border-color: ${iconColor}20;">
+                ${iconSvg}
+            </div>
+            <h3 class="tc-title">${escapeHTML(t.title)}</h3>
+            <span class="tc-category">${escapeHTML(t.category)}</span>
+            <div class="tc-meta">Uploaded: ${new Date(t.uploaded_at).toLocaleDateString()}</div>
+            <div class="tc-actions">
+                <button class="btn-preview" onclick="previewTemplate(${t.id}, '${escapeJS(t.filename)}')">Preview</button>
+                <button class="btn-download" onclick="downloadTemplate(${t.id})">Download</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function filterCategory(btn, category) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTemplates(category);
+}
+
+function previewTemplate(id, filename) {
+    if (filename.toLowerCase().endsWith('.pdf')) {
+        window.open(`${API_BASE}/api/template/${id}`, '_blank');
+    } else {
+        showToast('ℹ️ DOCX preview is not supported directly in-browser. Downloading template file.');
+        downloadTemplate(id);
+    }
+}
+
+function downloadTemplate(id) {
+    window.location.href = `${API_BASE}/api/template/${id}?download=true`;
+}
+
+async function handleUpload(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('templateFile');
+    const titleInput = document.getElementById('templateTitle');
+    const categorySelect = document.getElementById('templateCategory');
+    const submitBtn = document.querySelector('.admin-section button[type="submit"]');
+    
+    if (!fileInput.files.length) {
+        showToast('⚠️ Please select a file to upload.');
+        return;
+    }
+    
+    const file = fileInput.files[0];
+    const title = titleInput.value.trim();
+    const category = categorySelect.value;
+    
+    if (!title) {
+        showToast('⚠️ Please enter a title.');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', title);
+    formData.append('category', category);
+    formData.append('userId', user.id);
+    
+    try {
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Uploading...';
+        }
+        
+        const res = await fetch(`${API_BASE}/api/upload-template`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+            throw new Error(data.error || 'Upload failed');
+        }
+        
+        showToast('🎉 Template uploaded successfully!');
+        uploadForm.reset();
+        loadTemplates();
+        
+    } catch (err) {
+        console.error(err);
+        showToast(`❌ Error: ${err.message}`);
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Upload Template';
+        }
+    }
+}
+
+function escapeHTML(str) {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function escapeJS(str) {
+    return str.replace(/'/g, "\\'");
+}
+</script>
+</body>
+</html>
