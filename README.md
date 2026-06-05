@@ -1,6 +1,6 @@
 # 🚀 Carreermatch AI
 
-Carreermatch AI ek smart full-stack web application hai jo users ko unki skills ke mutabik sahi career path aur jobs dhundhne mein madad karta hai. Isme ek powerful backend hai jo AI flows aur data processing ka use karke intelligent recommendations deta hai.
+Carreermatch AI is a smart full-stack web application designed to help users discover the right career paths and job opportunities based on their skill sets. Powered by an intelligent backend that processes AI flows and data analytics, this platform delivers personalized career recommendations.
 
 ---
 
@@ -16,25 +16,25 @@ Carreermatch AI ek smart full-stack web application hai jo users ko unki skills 
 
 ---
 
-## ✨ Key Features (Mukhy Vaisheshtayein)
+## ✨ Key Features
 
-*   **Smart User Dashboard:** Users ko unke career progression aur saved jobs ka ek saaf-suthra overview dikhata hai.
-*   **ATS Score Evaluation:** Resume ko analyze karke ATS (Applicant Tracking System) score batata hai taaki users apna resume behtar kar sakein.
-*   **Skill Gap Analysis:** User ki maujuda skills aur market demand ke beech ka gap nikal kar unhe sahi skills seekhne ka sujhav deta hai.
-*   **Secure Authentication:** User data ko surakshit rakhne ke liye ek proper login aur signup system (Auth) integrated hai.
+*   **Smart User Dashboard:** Provides users with a clean, intuitive overview of their career progression, stats, and saved jobs.
+*   **ATS Score Evaluation:** Analyzes resumes to calculate an ATS (Applicant Tracking System) compatibility score, helping users optimize their resumes for recruiters.
+*   **Skill Gap Analysis:** Compares the user's current skills against market demands to identify gaps and suggest the exact skills they need to learn next.
+*   **Secure Authentication:** Features a fully integrated signup and login system to ensure user data remains private and secure.
 
 ---
 
 ## 🛠️ Tech Stack Used
 
-*   **Frontend:** HTML5, CSS3, JavaScript (Interactions aur UI designs ke liye)
-*   **Backend:** Python, Flask/FastAPI (AI workflows aur API endpoints handle karne ke liye)
-*   **Database:** SQLite / Local Database (User aur job records store karne ke liye)
+*   **Frontend:** HTML5, CSS3, JavaScript (for building responsive, dynamic UI views and styling)
+*   **Backend:** Python (for handling core logic, data processing, and AI workflow scripts)
+*   **Database:** SQLite / Local Database (for safely storing user profiles and application data)
 
 ---
 
-## 🚀 How to Run Locally (Apne Computer Par Kaise Chalayein)
+## 🚀 How to Run Locally
 
-1. Repository ko clone karein:
+1. Clone the repository:
 ```bash
    git clone [https://github.com/peeyush689/Carreermatch-AI.git](https://github.com/peeyush689/Carreermatch-AI.git)
